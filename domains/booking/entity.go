@@ -11,6 +11,8 @@ type Entity struct {
 	Days      []Day     `json:"days"`
 	State     State     `json:"state"`
 	IsPublic  *bool     `json:"isPublic"`
+	StartDate time.Time `json:"startDate"`
+	EndDate   time.Time `json:"endDate"`
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
 }
@@ -41,6 +43,7 @@ type State string
 
 const (
 	Canceled State = "canceled"
+	Created  State = "created"
 	Expired  State = "expired"
 	Pending  State = "pending"
 	Paid     State = "paid"
