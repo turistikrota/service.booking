@@ -5,6 +5,7 @@ import "time"
 type Entity struct {
 	UUID       string    `json:"uuid"`
 	PostUUID   string    `json:"postUUID"`
+	OwnerUUID  string    `json:"ownerUUID"`
 	People     People    `json:"people"`
 	User       User      `json:"user"`
 	Guests     []Guest   `json:"guests"`
