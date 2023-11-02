@@ -3,18 +3,19 @@ package booking
 import "time"
 
 type Entity struct {
-	UUID      string    `json:"uuid"`
-	PostUUID  string    `json:"postUUID"`
-	People    People    `json:"people"`
-	User      User      `json:"user"`
-	Guests    []Guest   `json:"guests"`
-	Days      []Day     `json:"days"`
-	State     State     `json:"state"`
-	IsPublic  *bool     `json:"isPublic"`
-	StartDate time.Time `json:"startDate"`
-	EndDate   time.Time `json:"endDate"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
+	UUID       string    `json:"uuid"`
+	PostUUID   string    `json:"postUUID"`
+	People     People    `json:"people"`
+	User       User      `json:"user"`
+	Guests     []Guest   `json:"guests"`
+	Days       []Day     `json:"days"`
+	State      State     `json:"state"`
+	IsPublic   *bool     `json:"isPublic"`
+	TotalPrice float64   `json:"totalPrice"`
+	StartDate  time.Time `json:"startDate"`
+	EndDate    time.Time `json:"endDate"`
+	CreatedAt  time.Time `json:"createdAt"`
+	UpdatedAt  time.Time `json:"updatedAt"`
 }
 
 type User struct {
