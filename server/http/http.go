@@ -64,6 +64,7 @@ func (h srv) Listen() error {
 		AcceptLangs: []string{},
 		CreateHandler: func(router fiber.Router) fiber.Router {
 			router.Use(h.cors(), h.deviceUUID())
+			router.Post("/:postUUID", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.BookingCreate))
 			return router
 		},
 	})
