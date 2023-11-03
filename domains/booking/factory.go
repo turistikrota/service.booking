@@ -17,12 +17,13 @@ func (f Factory) IsZero() bool {
 }
 
 type NewConfig struct {
-	PostUUID string
-	People   People
-	User     User
-	Days     []Day
-	State    State
-	IsPublic *bool
+	PostUUID  string
+	People    People
+	User      User
+	State     State
+	StartDate time.Time
+	EndDate   time.Time
+	IsPublic  *bool
 }
 
 func (f Factory) New(cnf NewConfig) *Entity {
@@ -32,9 +33,11 @@ func (f Factory) New(cnf NewConfig) *Entity {
 		People:    cnf.People,
 		User:      cnf.User,
 		Guests:    []Guest{},
-		Days:      cnf.Days,
+		Days:      []Day{},
 		State:     cnf.State,
 		IsPublic:  cnf.IsPublic,
+		StartDate: cnf.StartDate,
+		EndDate:   cnf.EndDate,
 		CreatedAt: t,
 		UpdatedAt: t,
 	}

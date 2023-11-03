@@ -3,7 +3,7 @@ module github.com/turistikrota/service.booking
 go 1.21.2
 
 require (
-	github.com/cilloparch/cillop v0.0.3
+	github.com/cilloparch/cillop v0.0.4
 	github.com/turistikrota/service.shared v0.0.28
 	go.mongodb.org/mongo-driver v1.12.1
 )

@@ -36,9 +36,9 @@ type Day struct {
 }
 
 type People struct {
-	Adult int `json:"adult"`
-	Kid   int `json:"kid"`
-	Baby  int `json:"baby"`
+	Adult int `json:"adult" validate:"required,gt=0"`
+	Kid   int `json:"kid" validate:"gte=0"`
+	Baby  int `json:"baby" validate:"gte=0"`
 }
 
 type State string
