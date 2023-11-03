@@ -28,6 +28,13 @@ func NewBookingCreateHandler(factory booking.Factory, repo booking.Repo, events 
 	return func(ctx context.Context, cmd BookingCreateCmd) (*BookingCreateRes, *i18np.Error) {
 		startDate, _ := time.Parse("2006-01-02", cmd.StartDate)
 		endDate, _ := time.Parse("2006-01-02", cmd.EndDate)
+		available, err := repo.CheckAvailability(ctx, cmd.PostUUID, startDate, endDate)
+		if err != nil {
+			return nil, err
+		}
+		if !available {
+			return nil, factory.Errors.NotAvailable()
+		}
 		e := factory.New(booking.NewConfig{
 			PostUUID:  cmd.PostUUID,
 			People:    *cmd.People,
