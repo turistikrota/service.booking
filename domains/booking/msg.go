@@ -1,15 +1,19 @@
 package booking
 
 type messages struct {
-	Failed        string
-	InvalidUUID   string
-	InternalError string
-	NotAvailable  string
+	Failed                string
+	InvalidUUID           string
+	InternalError         string
+	NotAvailable          string
+	StartDateAfterEndDate string
+	StartDateBeforeNow	string
 }
 
 var I18nMessages = messages{
-	Failed:        "booking_failed",
-	InvalidUUID:   "invalid_uuid",
-	InternalError: "internal_error",
-	NotAvailable:  "not_available",
+	Failed:                "booking_failed",
+	InvalidUUID:           "invalid_uuid",
+	InternalError:         "internal_error",
+	NotAvailable:          "not_available",
+	StartDateAfterEndDate: "start_date_after_end_date",
+	StartDateBeforeNow:    "start_date_before_now",
 }

@@ -13,8 +13,8 @@ type BookingCreateCmd struct {
 	PostUUID  string          `json:"-"`
 	User      booking.User    `json:"-"`
 	People    *booking.People `json:"people" validate:"required"`
-	StartDate string          `json:"startDate" validate:"required,datetime"`
-	EndDate   string          `json:"endDate" validate:"required,datetime"`
+	StartDate string          `json:"startDate" validate:"required,datetime=2006-01-02"`
+	EndDate   string          `json:"endDate" validate:"required,datetime=2006-01-02"`
 	IsPublic  *bool           `json:"isPublic" validate:"required"`
 }
 
@@ -44,6 +44,10 @@ func NewBookingCreateHandler(factory booking.Factory, repo booking.Repo, events 
 			EndDate:   endDate,
 			IsPublic:  cmd.IsPublic,
 		})
+		error := factory.Validate(e)
+		if error != nil {
+			return nil, error
+		}
 		res, err := repo.Create(ctx, e)
 		if err != nil {
 			return nil, err

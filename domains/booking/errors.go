@@ -7,6 +7,8 @@ type Errors interface {
 	InvalidUUID() *i18np.Error
 	InternalError() *i18np.Error
 	NotAvailable() *i18np.Error
+	StartDateAfterEndDate() *i18np.Error
+	StartDateBeforeNow() *i18np.Error
 }
 
 type errors struct{}
@@ -31,4 +33,12 @@ func (e *errors) InternalError() *i18np.Error {
 
 func (e *errors) NotAvailable() *i18np.Error {
 	return i18np.NewError(I18nMessages.NotAvailable)
+}
+
+func (e *errors) StartDateAfterEndDate() *i18np.Error {
+	return i18np.NewError(I18nMessages.StartDateAfterEndDate)
+}
+
+func (e *errors) StartDateBeforeNow() *i18np.Error {
+	return i18np.NewError(I18nMessages.StartDateBeforeNow)
 }

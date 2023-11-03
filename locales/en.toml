@@ -32,6 +32,8 @@ booking_failed = "Booking failed."
 invalid_uuid = "Invalid UUID."
 internal_error = "Internal error."
 not_available = "The post not available. For selected date range is already booked."
+start_date_after_end_date = "Start date after end date."
+start_date_before_now = "Start date before now."
 
 http_success_post_created = "Post created."
 http_success_post_updated = "Post updated."

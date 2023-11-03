@@ -1,6 +1,10 @@
 package booking
 
-import "time"
+import (
+	"time"
+
+	"github.com/cilloparch/cillop/i18np"
+)
 
 type Factory struct {
 	Errors Errors
@@ -41,4 +45,28 @@ func (f Factory) New(cnf NewConfig) *Entity {
 		CreatedAt: t,
 		UpdatedAt: t,
 	}
+}
+
+type validator func(e *Entity) *i18np.Error
+
+func (f Factory) Validate(e *Entity) *i18np.Error {
+	validators := []validator{
+		f.validateTime,
+	}
+	for _, v := range validators {
+		if err := v(e); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (f Factory) validateTime(e *Entity) *i18np.Error {
+	if e.StartDate.After(e.EndDate) {
+		return f.Errors.StartDateAfterEndDate()
+	}
+	if e.StartDate.Before(time.Now()) {
+		return f.Errors.StartDateBeforeNow()
+	}
+	return nil
 }

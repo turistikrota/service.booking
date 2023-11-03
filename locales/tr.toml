@@ -33,6 +33,8 @@ booking_failed = "Rezervasyon başarısız oldu."
 invalid_uuid = "Geçersiz UUID."
 internal_error = "İç hata."
 not_available = "İlan rezerve edilemez. Seçilen tarihler arasında rezervasyon bulunmaktadır."
+start_date_after_end_date = "Başlangıç tarihi bitiş tarihinden sonra olamaz."
+start_date_before_now = "Başlangıç tarihi şimdiden önce olamaz."
 
 http_success_post_created = "Gönderi başarıyla oluşturuldu."
 http_success_post_updated = "Gönderi başarıyla güncellendi."
