@@ -37,6 +37,7 @@ type Repo interface {
 	ListByOwner(ctx context.Context, ownerUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
 	ListByPost(ctx context.Context, postUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
 	GetDetailWithUser(ctx context.Context, uuid string, userUUID string) (*Entity, *i18np.Error)
+	CheckAvailability(ctx context.Context, postUUID string, startDate time.Time, endDate time.Time) (bool, *i18np.Error)
 }
 
 type repo struct {
@@ -389,6 +390,31 @@ func (r *repo) GetDetailWithUser(ctx context.Context, uuid string, userUUID stri
 		return nil, r.factory.Errors.InternalError()
 	}
 	return *res, nil
+}
+
+func (r *repo) CheckAvailability(ctx context.Context, postUUID string, startDate time.Time, endDate time.Time) (bool, *i18np.Error) {
+	filter := bson.M{
+		fields.PostUUID: postUUID,
+		fields.State: bson.M{
+			"$in": []State{
+				Created,
+				Pending,
+				Paid,
+				Used,
+			},
+		},
+		fields.StartDate: bson.M{
+			"$lte": endDate,
+		},
+		fields.EndDate: bson.M{
+			"$gte": startDate,
+		},
+	}
+	count, err := r.collection.CountDocuments(ctx, filter)
+	if err != nil {
+		return false, r.factory.Errors.InternalError()
+	}
+	return count == 0, nil
 }
 
 func (r *repo) listOptions(listConfig list.Config) *options.FindOptions {
