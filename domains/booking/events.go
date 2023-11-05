@@ -1,6 +1,8 @@
 package booking
 
 import (
+	"time"
+
 	"github.com/cilloparch/cillop/events"
 	"github.com/turistikrota/service.booking/config"
 )
@@ -12,7 +14,11 @@ type Events interface {
 
 type (
 	CreatedEvent struct {
-		Entity *Entity `json:"entity"`
+		BookingUUID string    `json:"booking_uuid"`
+		PostUUID    string    `json:"post_uuid"`
+		People      *People   `json:"people"`
+		StartDate   time.Time `json:"start_date"`
+		EndDate     time.Time `json:"end_date"`
 	}
 	PayPendingEvent struct {
 		BookingUUID string `json:"booking_uuid"`

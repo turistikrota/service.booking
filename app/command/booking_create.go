@@ -53,7 +53,11 @@ func NewBookingCreateHandler(factory booking.Factory, repo booking.Repo, events 
 			return nil, err
 		}
 		events.Created(booking.CreatedEvent{
-			Entity: e,
+			BookingUUID: res.UUID,
+			PostUUID:    res.PostUUID,
+			People:      &res.People,
+			StartDate:   res.StartDate,
+			EndDate:     res.EndDate,
 		})
 		return &BookingCreateRes{
 			UUID: res.UUID,
