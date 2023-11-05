@@ -45,6 +45,7 @@ type State string
 
 const (
 	Canceled State = "canceled"
+	NotValid State = "not_valid"
 	Created  State = "created"
 	Expired  State = "expired"
 	Pending  State = "pending"

@@ -26,6 +26,7 @@ type Repo interface {
 	MarkPaid(ctx context.Context, uuid string) *i18np.Error
 	MarkRefunded(ctx context.Context, uuid string) *i18np.Error
 	MarkUsed(ctx context.Context, uuid string) *i18np.Error
+	MarkNotValid(ctx context.Context, uuid string) *i18np.Error
 	MarkPublic(ctx context.Context, uuid string) *i18np.Error
 	MarkPrivate(ctx context.Context, uuid string) *i18np.Error
 	AddGuest(ctx context.Context, uuid string, guest *Guest) *i18np.Error
@@ -163,6 +164,23 @@ func (r *repo) MarkUsed(ctx context.Context, uuid string) *i18np.Error {
 	update := bson.M{
 		"$set": bson.M{
 			fields.State:     Used,
+			fields.UpdatedAt: time.Now(),
+		},
+	}
+	return r.helper.UpdateOne(ctx, filter, update)
+}
+
+func (r *repo) MarkNotValid(ctx context.Context, uuid string) *i18np.Error {
+	id, err := mongo2.TransformId(uuid)
+	if err != nil {
+		return r.factory.Errors.InvalidUUID()
+	}
+	filter := bson.M{
+		fields.UUID: id,
+	}
+	update := bson.M{
+		"$set": bson.M{
+			fields.State:     NotValid,
 			fields.UpdatedAt: time.Now(),
 		},
 	}
