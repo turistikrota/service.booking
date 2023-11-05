@@ -2,6 +2,12 @@ package booking
 
 import "github.com/cilloparch/cillop/i18np"
 
+type ValidationError struct {
+	Field   string  `json:"field"`
+	Message string  `json:"message"`
+	Params  i18np.P `json:"params"`
+}
+
 type Errors interface {
 	Failed(string) *i18np.Error
 	InvalidUUID() *i18np.Error

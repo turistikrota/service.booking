@@ -9,8 +9,9 @@ import (
 )
 
 type BookingValidationFailedCmd struct {
-	BookingUUID string `json:"booking_uuid"`
-	PostUUID    string `json:"post_uuid"`
+	BookingUUID string                     `json:"booking_uuid"`
+	PostUUID    string                     `json:"post_uuid"`
+	Errors      []*booking.ValidationError `json:"errors"`
 }
 
 type BookingValidationFailedRes struct{}

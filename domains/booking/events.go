@@ -47,5 +47,5 @@ func (e bookingEvents) Created(event CreatedEvent) {
 }
 
 func (e bookingEvents) PayPending(event PayPendingEvent) {
-	_ = e.publisher.Publish(e.topics.Booking.ValidationStart, event)
+	_ = e.publisher.Publish(e.topics.Booking.PayPending, event)
 }
