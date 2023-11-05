@@ -28,6 +28,5 @@ func (s srv) OnBookingValidationFail(data []byte) {
 		fmt.Println(err)
 		return
 	}
-	fmt.Printf("%+v\n", cmd)
 	_, _ = s.app.Commands.BookingValidationFailed(context.Background(), cmd)
 }
