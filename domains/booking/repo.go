@@ -18,9 +18,19 @@ type WithUser struct {
 	Name string
 }
 
+type Validated struct {
+	UUID       string
+	PostUUID   string
+	OwnerUUID  string
+	OwnerName  string
+	TotalPrice float64
+	Days       []Day
+}
+
 type Repo interface {
 	Create(ctx context.Context, entity *Entity) (*Entity, *i18np.Error)
 	Cancel(ctx context.Context, uuid string) *i18np.Error
+	Validated(ctx context.Context, v *Validated) *i18np.Error
 	MarkPending(ctx context.Context, uuid string) *i18np.Error
 	MarkExpired(ctx context.Context, uuid string) *i18np.Error
 	MarkPaid(ctx context.Context, uuid string) *i18np.Error
@@ -29,6 +39,7 @@ type Repo interface {
 	MarkNotValid(ctx context.Context, uuid string) *i18np.Error
 	MarkPublic(ctx context.Context, uuid string) *i18np.Error
 	MarkPrivate(ctx context.Context, uuid string) *i18np.Error
+	GetByUUID(ctx context.Context, uuid string) (*Entity, *i18np.Error)
 	AddGuest(ctx context.Context, uuid string, guest *Guest) *i18np.Error
 	RemoveGuest(ctx context.Context, uuid string, guest WithUser, user WithUser) *i18np.Error
 	MarkGuestAsPublic(ctx context.Context, uuid string, guest WithUser, user WithUser) *i18np.Error
@@ -80,6 +91,26 @@ func (r *repo) Cancel(ctx context.Context, uuid string) *i18np.Error {
 		"$set": bson.M{
 			fields.State:     Canceled,
 			fields.UpdatedAt: time.Now(),
+		},
+	}
+	return r.helper.UpdateOne(ctx, filter, update)
+}
+
+func (r *repo) Validated(ctx context.Context, v *Validated) *i18np.Error {
+	id, err := mongo2.TransformId(v.UUID)
+	if err != nil {
+		return r.factory.Errors.InvalidUUID()
+	}
+	filter := bson.M{
+		fields.UUID: id,
+	}
+	update := bson.M{
+		"$set": bson.M{
+			fields.OwnerUUID:  v.OwnerUUID,
+			fields.Days:       v.Days,
+			fields.TotalPrice: v.TotalPrice,
+			fields.State:      Pending,
+			fields.UpdatedAt:  time.Now(),
 		},
 	}
 	return r.helper.UpdateOne(ctx, filter, update)
@@ -403,8 +434,23 @@ func (r *repo) GetDetailWithUser(ctx context.Context, uuid string, userUUID stri
 		fields.UUID:                id,
 		userField(userFields.UUID): userUUID,
 	}
-	res, _, err := r.helper.GetFilter(ctx, filter)
+	res, _, _err := r.helper.GetFilter(ctx, filter)
+	if _err != nil {
+		return nil, r.factory.Errors.InternalError()
+	}
+	return *res, nil
+}
+
+func (r *repo) GetByUUID(ctx context.Context, uuid string) (*Entity, *i18np.Error) {
+	id, err := mongo2.TransformId(uuid)
 	if err != nil {
+		return nil, r.factory.Errors.InvalidUUID()
+	}
+	filter := bson.M{
+		fields.UUID: id,
+	}
+	res, _, _err := r.helper.GetFilter(ctx, filter)
+	if _err != nil {
 		return nil, r.factory.Errors.InternalError()
 	}
 	return *res, nil

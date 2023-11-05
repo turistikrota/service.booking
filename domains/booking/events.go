@@ -7,15 +7,15 @@ import (
 
 type Events interface {
 	Created(CreatedEvent)
-	Validated(ValidatedEvent)
+	PayPending(PayPendingEvent)
 }
 
 type (
 	CreatedEvent struct {
 		Entity *Entity `json:"entity"`
 	}
-	ValidatedEvent struct {
-		Entity *Entity `json:"entity"`
+	PayPendingEvent struct {
+		BookingUUID string `json:"booking_uuid"`
 	}
 )
 
@@ -36,6 +36,10 @@ func NewEvents(cnf EventConfig) Events {
 	}
 }
 
-func (e bookingEvents) Created(event CreatedEvent) {}
+func (e bookingEvents) Created(event CreatedEvent) {
+	_ = e.publisher.Publish(e.topics.Booking.ValidationStart, event)
+}
 
-func (e bookingEvents) Validated(event ValidatedEvent) {}
+func (e bookingEvents) PayPending(event PayPendingEvent) {
+	_ = e.publisher.Publish(e.topics.Booking.ValidationStart, event)
+}

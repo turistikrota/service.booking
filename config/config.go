@@ -58,18 +58,16 @@ type Session struct {
 }
 
 type Topics struct {
-	Post PostTopics
+	Booking BookingTopics
 }
 type RSA struct {
 	PrivateKeyFile string `env:"RSA_PRIVATE_KEY"`
 	PublicKeyFile  string `env:"RSA_PUBLIC_KEY"`
 }
 
-type PostTopics struct {
-	BookingValidated string `env:"TOPIC_POST_BOOKING_VALIDATED" envDefault:"post.booking.validated"`
-}
-
 type BookingTopics struct {
+	PayPending string `env:"STREAMING_TOPIC_BOOKING_PAY_PENDING"`
+
 	ValidationSuccess string `env:"STREAMING_TOPIC_BOOKING_VALIDATION_SUCCESS"`
 	ValidationFail    string `env:"STREAMING_TOPIC_BOOKING_VALIDATION_FAIL"`
 	ValidationStart   string `env:"STREAMING_TOPIC_BOOKING_VALIDATION_START"`
