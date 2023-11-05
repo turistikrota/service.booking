@@ -70,8 +70,9 @@ type PostTopics struct {
 }
 
 type BookingTopics struct {
-	BookingCreated   string `env:"TOPIC_BOOKING_CREATED" envDefault:"booking.created"`
-	BookingValidated string `env:"TOPIC_BOOKING_VALIDATED" envDefault:"booking.validated"`
+	ValidationSuccess string `env:"STREAMING_TOPIC_BOOKING_VALIDATION_SUCCESS"`
+	ValidationFail    string `env:"STREAMING_TOPIC_BOOKING_VALIDATION_FAIL"`
+	ValidationStart   string `env:"STREAMING_TOPIC_BOOKING_VALIDATION_START"`
 }
 
 type Nats struct {
