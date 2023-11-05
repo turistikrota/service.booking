@@ -8,7 +8,9 @@ type Application struct {
 }
 
 type Commands struct {
-	BookingCreate command.BookingCreateHandler
+	BookingCreate            command.BookingCreateHandler
+	BookingValidationSucceed command.BookingValidationSucceedHandler
+	BookingValidationFailed  command.BookingValidationFailedHandler
 }
 
 type Queries struct {

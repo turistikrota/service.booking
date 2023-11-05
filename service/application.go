@@ -29,7 +29,9 @@ func NewApplication(cnf Config) app.Application {
 
 	return app.Application{
 		Commands: app.Commands{
-			BookingCreate: command.NewBookingCreateHandler(bookingFactory, bookingRepo, bookingEvents),
+			BookingCreate:            command.NewBookingCreateHandler(bookingFactory, bookingRepo, bookingEvents),
+			BookingValidationSucceed: command.NewBookingValidationSucceedHandler(bookingRepo, bookingEvents),
+			BookingValidationFailed:  command.NewBookingValidationFailedHandler(bookingRepo),
 		},
 		Queries: app.Queries{},
 	}

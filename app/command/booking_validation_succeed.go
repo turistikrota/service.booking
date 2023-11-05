@@ -22,7 +22,7 @@ type BookingValidationSucceedRes struct{}
 
 type BookingValidationSucceedHandler cqrs.HandlerFunc[BookingValidationSucceedCmd, *BookingValidationSucceedRes]
 
-func NewBookingValidationSucceedHandler(factory booking.Factory, repo booking.Repo, events booking.Events) BookingValidationSucceedHandler {
+func NewBookingValidationSucceedHandler(repo booking.Repo, events booking.Events) BookingValidationSucceedHandler {
 	return func(ctx context.Context, cmd BookingValidationSucceedCmd) (*BookingValidationSucceedRes, *i18np.Error) {
 		days := make([]booking.Day, len(cmd.PricePerDays))
 		for i, pricePerDay := range cmd.PricePerDays {
