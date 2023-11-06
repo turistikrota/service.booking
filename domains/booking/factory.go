@@ -75,7 +75,7 @@ func (f Factory) IsCancelable(e *Entity) bool {
 	disallowStatus := []State{
 		Canceled,
 		Refunded,
-		Used,
+		
 	}
 	for _, s := range disallowStatus {
 		if e.State == s {

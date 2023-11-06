@@ -51,7 +51,6 @@ const (
 	Pending  State = "pending"
 	Paid     State = "paid"
 	Refunded State = "refunded"
-	Used     State = "used"
 )
 
 func (s State) String() string {
