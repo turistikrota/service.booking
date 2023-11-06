@@ -13,8 +13,10 @@ type Errors interface {
 	InvalidUUID() *i18np.Error
 	InternalError() *i18np.Error
 	NotAvailable() *i18np.Error
+	OnlyAdminCanDoThisAction() *i18np.Error
 	StartDateAfterEndDate() *i18np.Error
 	StartDateBeforeNow() *i18np.Error
+	NotCancelable() *i18np.Error
 }
 
 type errors struct{}
@@ -47,4 +49,12 @@ func (e *errors) StartDateAfterEndDate() *i18np.Error {
 
 func (e *errors) StartDateBeforeNow() *i18np.Error {
 	return i18np.NewError(I18nMessages.StartDateBeforeNow)
+}
+
+func (e *errors) OnlyAdminCanDoThisAction() *i18np.Error {
+	return i18np.NewError(I18nMessages.OnlyAdminCanDoThisAction)
+}
+
+func (e *errors) NotCancelable() *i18np.Error {
+	return i18np.NewError(I18nMessages.NotCancelable)
 }

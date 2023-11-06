@@ -48,7 +48,7 @@ type Repo interface {
 	ListMyAttendees(ctx context.Context, user WithUser, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
 	ListByOwner(ctx context.Context, ownerUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
 	ListByPost(ctx context.Context, postUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
-	GetDetailWithUser(ctx context.Context, uuid string, userUUID string) (*Entity, *i18np.Error)
+	GetDetailWithUser(ctx context.Context, uuid string, userUUID string) (*Entity, *bool, *i18np.Error)
 	CheckAvailability(ctx context.Context, postUUID string, startDate time.Time, endDate time.Time) (bool, *i18np.Error)
 }
 
@@ -425,20 +425,20 @@ func (r *repo) ListByPost(ctx context.Context, postUUID string, listConf list.Co
 	}, nil
 }
 
-func (r *repo) GetDetailWithUser(ctx context.Context, uuid string, userUUID string) (*Entity, *i18np.Error) {
+func (r *repo) GetDetailWithUser(ctx context.Context, uuid string, userUUID string) (*Entity, *bool, *i18np.Error) {
 	id, err := mongo2.TransformId(uuid)
 	if err != nil {
-		return nil, r.factory.Errors.InvalidUUID()
+		return nil, nil, r.factory.Errors.InvalidUUID()
 	}
 	filter := bson.M{
 		fields.UUID:                id,
 		userField(userFields.UUID): userUUID,
 	}
-	res, _, _err := r.helper.GetFilter(ctx, filter)
+	res, exists, _err := r.helper.GetFilter(ctx, filter)
 	if _err != nil {
-		return nil, r.factory.Errors.InternalError()
+		return nil, nil, r.factory.Errors.InternalError()
 	}
-	return *res, nil
+	return *res, &exists, nil
 }
 
 func (r *repo) GetByUUID(ctx context.Context, uuid string) (*Entity, *i18np.Error) {

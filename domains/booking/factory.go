@@ -70,3 +70,21 @@ func (f Factory) validateTime(e *Entity) *i18np.Error {
 	}
 	return nil
 }
+
+func (f Factory) IsCancelable(e *Entity) bool {
+	disallowStatus := []State{
+		Canceled,
+		Refunded,
+		Used,
+	}
+	for _, s := range disallowStatus {
+		if e.State == s {
+			return false
+		}
+	}
+	now := time.Now()
+	if e.StartDate.Before(now) {
+		return false
+	}
+	return true
+}
