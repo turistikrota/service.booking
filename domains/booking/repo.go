@@ -44,6 +44,7 @@ type Repo interface {
 	RemoveGuest(ctx context.Context, uuid string, guest WithUser, user WithUser) *i18np.Error
 	MarkGuestAsPublic(ctx context.Context, uuid string, guest WithUser, user WithUser) *i18np.Error
 	MarkGuestAsPrivate(ctx context.Context, uuid string, guest WithUser, user WithUser) *i18np.Error
+	List(ctx context.Context, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
 	ListMyOrganized(ctx context.Context, user WithUser, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
 	ListMyAttendees(ctx context.Context, user WithUser, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
 	ListByOwner(ctx context.Context, ownerUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
@@ -341,6 +342,26 @@ func (r *repo) ListMyOrganized(ctx context.Context, user WithUser, listConf list
 		userField(userFields.UUID): user.UUID,
 		userField(userFields.Name): user.Name,
 	}
+	l, err := r.helper.GetListFilter(ctx, filter, r.listOptions(listConf))
+	if err != nil {
+		return nil, err
+	}
+	filtered, _err := r.helper.GetFilterCount(ctx, filter)
+	if _err != nil {
+		return nil, _err
+	}
+	return &list.Result[*Entity]{
+		IsNext:        filtered > listConf.Offset+listConf.Limit,
+		IsPrev:        listConf.Offset > 0,
+		FilteredTotal: filtered,
+		Total:         filtered,
+		Page:          listConf.Offset/listConf.Limit + 1,
+		List:          l,
+	}, nil
+}
+
+func (r *repo) List(ctx context.Context, listConf list.Config) (*list.Result[*Entity], *i18np.Error) {
+	filter := bson.M{}
 	l, err := r.helper.GetListFilter(ctx, filter, r.listOptions(listConf))
 	if err != nil {
 		return nil, err
