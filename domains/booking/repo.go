@@ -48,6 +48,7 @@ type Repo interface {
 	ListMyAttendees(ctx context.Context, user WithUser, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
 	ListByOwner(ctx context.Context, ownerUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
 	ListByPost(ctx context.Context, postUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
+	ListByUser(ctx context.Context, userName string, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
 	GetDetailWithUser(ctx context.Context, uuid string, userUUID string) (*Entity, *bool, *i18np.Error)
 	CheckAvailability(ctx context.Context, postUUID string, startDate time.Time, endDate time.Time) (bool, *i18np.Error)
 }
@@ -406,6 +407,35 @@ func (r *repo) ListByOwner(ctx context.Context, ownerUUID string, listConf list.
 func (r *repo) ListByPost(ctx context.Context, postUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error) {
 	filter := bson.M{
 		fields.PostUUID: postUUID,
+	}
+	l, err := r.helper.GetListFilter(ctx, filter, r.listOptions(listConf))
+	if err != nil {
+		return nil, err
+	}
+	filtered, _err := r.helper.GetFilterCount(ctx, filter)
+	if _err != nil {
+		return nil, _err
+	}
+	return &list.Result[*Entity]{
+		IsNext:        filtered > listConf.Offset+listConf.Limit,
+		IsPrev:        listConf.Offset > 0,
+		FilteredTotal: filtered,
+		Total:         filtered,
+		Page:          listConf.Offset/listConf.Limit + 1,
+		List:          l,
+	}, nil
+}
+
+func (r *repo) ListByUser(ctx context.Context, userName string, listConf list.Config) (*list.Result[*Entity], *i18np.Error) {
+	filter := bson.M{
+		"$or": []bson.M{
+			{
+				userField(userFields.Name): userName,
+			},
+			{
+				guestField(guestFields.Name): userName,
+			},
+		},
 	}
 	l, err := r.helper.GetListFilter(ctx, filter, r.listOptions(listConf))
 	if err != nil {
