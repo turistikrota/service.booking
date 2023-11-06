@@ -19,7 +19,7 @@ type Commands struct {
 	BookingMarkPublic        command.BookingMarkPublicHandler
 	BookingRemoveGuest       command.BookingRemoveGuestHandler
 	BookingGuestMarkPublic   command.BookingGuestMarkPublicHandler
-	BookingGuestMarkPrivate  command.BookingGuestMarkPrivateCmd
+	BookingGuestMarkPrivate  command.BookingGuestMarkPrivateHandler
 	BookingValidationSucceed command.BookingValidationSucceedHandler
 	BookingValidationFailed  command.BookingValidationFailedHandler
 
@@ -29,9 +29,6 @@ type Commands struct {
 }
 
 type Queries struct {
-	InviteGetByBookingUUID   query.InviteGetByBookingUUIDHandler
-	InviteGetByEmail         query.InviteGetByEmailHandler
-	InviteGetByUUID          query.InviteGetByUUIDHandler
 	BookingAdminList         query.BookingAdminListHandler
 	BookingAdminView         query.BookingAdminViewHandler
 	BookingCheckAvailability query.BookingCheckAvailabilityHandler
@@ -41,4 +38,8 @@ type Queries struct {
 	BookingListMyAttendees   query.BookingListMyAttendeesHandler
 	BookingListMyOrganized   query.BookingListMyOrganizedHandler
 	BookingView              query.BookingViewHandler
+
+	InviteGetByBookingUUID query.InviteGetByBookingUUIDHandler
+	InviteGetByEmail       query.InviteGetByEmailHandler
+	InviteGetByUUID        query.InviteGetByUUIDHandler
 }
