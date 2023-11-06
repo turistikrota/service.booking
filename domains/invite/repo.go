@@ -17,7 +17,7 @@ type Repository interface {
 	GetByBookingUUID(ctx context.Context, bookingUUID string) ([]*Entity, *i18np.Error)
 	GetByEmail(ctx context.Context, email string) ([]*Entity, *i18np.Error)
 	Use(ctx context.Context, uuid string) *i18np.Error
-	Delete(ctx context.Context, uuid string) *i18np.Error
+	Delete(ctx context.Context, uuid string, creatorName string) *i18np.Error
 }
 
 type repo struct {
@@ -96,13 +96,14 @@ func (r *repo) Use(ctx context.Context, uuid string) *i18np.Error {
 	return r.helper.UpdateOne(ctx, filter, setter)
 }
 
-func (r *repo) Delete(ctx context.Context, uuid string) *i18np.Error {
+func (r *repo) Delete(ctx context.Context, uuid string, creatorName string) *i18np.Error {
 	id, err := mongo2.TransformId(uuid)
 	if err != nil {
 		return r.factory.Errors.InvalidUUID()
 	}
 	filter := bson.M{
-		fields.UUID: id,
+		fields.UUID:            id,
+		fields.CreatorUserName: creatorName,
 	}
 	setter := bson.M{
 		"$set": bson.M{
