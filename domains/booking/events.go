@@ -9,6 +9,7 @@ import (
 
 type Events interface {
 	Created(CreatedEvent)
+	Cancelled(CancelledEvent)
 	PayPending(PayPendingEvent)
 }
 
@@ -21,6 +22,9 @@ type (
 		EndDate     time.Time `json:"end_date"`
 	}
 	PayPendingEvent struct {
+		BookingUUID string `json:"booking_uuid"`
+	}
+	CancelledEvent struct {
 		BookingUUID string `json:"booking_uuid"`
 	}
 )
@@ -48,4 +52,8 @@ func (e bookingEvents) Created(event CreatedEvent) {
 
 func (e bookingEvents) PayPending(event PayPendingEvent) {
 	_ = e.publisher.Publish(e.topics.Booking.PayPending, event)
+}
+
+func (e bookingEvents) Cancelled(event CancelledEvent) {
+	_ = e.publisher.Publish(e.topics.Booking.Cancelled, event)
 }

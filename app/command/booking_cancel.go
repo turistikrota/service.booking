@@ -32,6 +32,9 @@ func NewBookingCancelHandler(factory booking.Factory, repo booking.Repo, events 
 		if err := repo.Cancel(ctx, cmd.UUID); err != nil {
 			return nil, err
 		}
+		events.Cancelled(booking.CancelledEvent{
+			BookingUUID: cmd.UUID,
+		})
 		return &BookingCancelRes{}, nil
 	}
 }

@@ -67,6 +67,7 @@ type RSA struct {
 
 type BookingTopics struct {
 	PayPending string `env:"STREAMING_TOPIC_BOOKING_PAY_PENDING"`
+	Cancelled  string `env:"STREAMING_TOPIC_BOOKING_CANCELLED"`
 
 	ValidationSuccess string `env:"STREAMING_TOPIC_BOOKING_VALIDATION_SUCCESS"`
 	ValidationFail    string `env:"STREAMING_TOPIC_BOOKING_VALIDATION_FAIL"`
