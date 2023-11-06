@@ -59,6 +59,7 @@ type Session struct {
 
 type Topics struct {
 	Booking BookingTopics
+	Notify  NotifyTopics
 }
 type RSA struct {
 	PrivateKeyFile string `env:"RSA_PRIVATE_KEY"`
@@ -74,9 +75,17 @@ type BookingTopics struct {
 	ValidationStart   string `env:"STREAMING_TOPIC_BOOKING_VALIDATION_START"`
 }
 
+type NotifyTopics struct {
+	SendMail string `env:"STREAMING_TOPIC_NOTIFY_EMAIL"`
+}
+
 type Nats struct {
 	Url     string   `env:"NATS_URL" envDefault:"nats://localhost:4222"`
 	Streams []string `env:"NATS_STREAMS" envDefault:""`
+}
+
+type Urls struct {
+	InviteAccept string `env:"URL_INVITE_ACCEPT"`
 }
 
 type App struct {
@@ -95,4 +104,5 @@ type App struct {
 	TokenSrv    TokenSrv
 	CacheRedis  CacheRedis
 	RSA         RSA
+	Urls        Urls
 }
