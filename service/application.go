@@ -68,9 +68,10 @@ func NewApplication(cnf Config) app.Application {
 			BookingListMyAttendees:   query.NewBookingListMyAttendeesHandler(bookingRepo),
 			BookingListMyOrganized:   query.NewBookingListMyOrganizedHandler(bookingRepo),
 			BookingView:              query.NewBookingViewHandler(bookingRepo),
-			InviteGetByBookingUUID:   query.NewInviteGetByBookingUUIDHandler(inviteRepo),
-			InviteGetByEmail:         query.NewInviteGetByEmailHandler(inviteRepo),
-			InviteGetByUUID:          query.NewInviteGetByUUIDHandler(inviteRepo),
+
+			InviteGetByBookingUUID: query.NewInviteGetByBookingUUIDHandler(inviteRepo),
+			InviteGetByEmail:       query.NewInviteGetByEmailHandler(inviteRepo),
+			InviteGetByUUID:        query.NewInviteGetByUUIDHandler(inviteRepo),
 		},
 	}
 }
