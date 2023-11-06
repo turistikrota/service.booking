@@ -22,3 +22,7 @@ func (e *Entity) ToOwnerListDto() BookingOwnerListDto {
 func (e *Entity) ToViewDto() BookingViewDto {
 	return BookingViewDto{}
 }
+
+func (e *Entity) ToAdminViewDto() BookingAdminViewDto {
+	return BookingAdminViewDto{}
+}
