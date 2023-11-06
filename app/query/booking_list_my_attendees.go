@@ -2,10 +2,8 @@ package query
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/cilloparch/cillop/cqrs"
-	"github.com/cilloparch/cillop/helpers/cache"
 	"github.com/cilloparch/cillop/i18np"
 	"github.com/cilloparch/cillop/types/list"
 	"github.com/turistikrota/service.booking/domains/booking"
@@ -24,32 +22,17 @@ type BookingListMyAttendeesRes struct {
 
 type BookingListMyAttendeesHandler cqrs.HandlerFunc[BookingListMyAttendeesQuery, *BookingListMyAttendeesRes]
 
-func NewBookingListMyAttendeesHandler(repo booking.Repo, cacheSrv cache.Service) BookingListMyAttendeesHandler {
-	cache := cache.New[*list.Result[*booking.Entity]](cacheSrv)
-
-	createCacheEntity := func() *list.Result[*booking.Entity] {
-		return &list.Result[*booking.Entity]{
-			List:          []*booking.Entity{},
-			Total:         0,
-			FilteredTotal: 0,
-			Page:          0,
-			IsNext:        false,
-			IsPrev:        false,
-		}
-	}
+func NewBookingListMyAttendeesHandler(repo booking.Repo) BookingListMyAttendeesHandler {
 	return func(ctx context.Context, query BookingListMyAttendeesQuery) (*BookingListMyAttendeesRes, *i18np.Error) {
 		query.Default()
 		offset := (*query.Page - 1) * *query.Limit
-		cacheHandler := func() (*list.Result[*booking.Entity], *i18np.Error) {
-			return repo.ListMyAttendees(ctx, booking.WithUser{
-				UUID: query.UserUUID,
-				Name: query.UserName,
-			}, list.Config{
-				Offset: offset,
-				Limit:  *query.Limit,
-			})
-		}
-		res, err := cache.Creator(createCacheEntity).Handler(cacheHandler).Get(ctx, fmt.Sprintf("booking:by_attendees:name:%s:offset:%v:limit:%v", query.UserName, offset, *query.Limit))
+		res, err := repo.ListMyAttendees(ctx, booking.WithUser{
+			UUID: query.UserUUID,
+			Name: query.UserName,
+		}, list.Config{
+			Offset: offset,
+			Limit:  *query.Limit,
+		})
 		if err != nil {
 			return nil, err
 		}
