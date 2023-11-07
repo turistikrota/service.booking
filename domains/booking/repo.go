@@ -276,8 +276,8 @@ func (r *repo) RemoveGuest(ctx context.Context, uuid string, guest WithUser, use
 	update := bson.M{
 		"$pull": bson.M{
 			fields.Guests: bson.M{
-				guestField(guestFields.Name): guest.Name,
-				guestField(guestFields.UUID): guest.UUID,
+				guestFields.UUID: guest.UUID,
+				guestFields.Name: guest.Name,
 			},
 		},
 	}
