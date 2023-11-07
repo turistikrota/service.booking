@@ -18,6 +18,7 @@ import (
 	"github.com/turistikrota/service.shared/auth/token"
 	httpServer "github.com/turistikrota/service.shared/server/http"
 	"github.com/turistikrota/service.shared/server/http/auth"
+	"github.com/turistikrota/service.shared/server/http/auth/claim_guard"
 	"github.com/turistikrota/service.shared/server/http/auth/current_account"
 	"github.com/turistikrota/service.shared/server/http/auth/current_user"
 	"github.com/turistikrota/service.shared/server/http/auth/device_uuid"
@@ -71,9 +72,16 @@ func (h srv) Listen() error {
 			router.Delete("/:uuid/guest", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.BookingGuestRemove))
 			router.Patch("/:uuid/guest/mark-public", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.BookingGuestMarkPublic))
 			router.Patch("/:uuid/guest/mark-private", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.BookingGuestMarkPrivate))
+
+			// invite routes
 			router.Post("/guest/invite", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.InviteCreate))
 			router.Patch("/guest/invite/:uuid/use", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.InviteUse))
 			router.Delete("/guest/invite/:uuid", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.InviteDelete))
+
+			// queries
+			admin := router.Group("/admin", h.currentUserAccess(), h.requiredAccess())
+			admin.Get("/bookings", h.adminRoute(config.Roles.Booking.List), h.rateLimit(), h.wrapWithTimeout(h.BookingAdminList))
+			admin.Get("/bookings/:uuid", h.adminRoute(config.Roles.Booking.View), h.rateLimit(), h.wrapWithTimeout(h.BookingAdminView))
 			return router
 		},
 	})
@@ -97,6 +105,18 @@ func (h srv) parseParams(c *fiber.Ctx, d interface{}) {
 
 func (h srv) parseQuery(c *fiber.Ctx, d interface{}) {
 	http.ParseQuery(c, h.validator, *h.i18n, d)
+}
+
+func (h srv) adminRoute(extra ...string) fiber.Handler {
+	claims := []string{config.Roles.Admin}
+	if len(extra) > 0 {
+		claims = append(claims, extra...)
+	}
+	return claim_guard.New(claim_guard.Config{
+		Claims: claims,
+		I18n:   *h.i18n,
+		MsgKey: Messages.Error.AdminRoute,
+	})
 }
 
 func (h srv) currentUserAccess() fiber.Handler {

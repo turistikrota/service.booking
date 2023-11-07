@@ -5,7 +5,9 @@ import (
 	"github.com/cilloparch/cillop/result"
 	"github.com/gofiber/fiber/v2"
 	"github.com/turistikrota/service.booking/app/command"
+	"github.com/turistikrota/service.booking/app/query"
 	"github.com/turistikrota/service.booking/domains/booking"
+	"github.com/turistikrota/service.booking/pkg/utils"
 	"github.com/turistikrota/service.shared/server/http/auth/current_account"
 	"github.com/turistikrota/service.shared/server/http/auth/current_user"
 )
@@ -158,4 +160,27 @@ func (h srv) InviteDelete(ctx *fiber.Ctx) error {
 		return result.Error(h.i18n.TranslateFromError(*err, l, a))
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res)
+}
+
+func (h srv) BookingAdminList(ctx *fiber.Ctx) error {
+	p := utils.Pagination{}
+	h.parseQuery(ctx, &p)
+	query := query.BookingAdminListQuery{}
+	res, err := h.app.Queries.BookingAdminList(ctx.UserContext(), query)
+	if err != nil {
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+		return result.Error(h.i18n.TranslateFromError(*err, l, a))
+	}
+	return result.SuccessDetail(Messages.Success.Ok, res.List)
+}
+
+func (h srv) BookingAdminView(ctx *fiber.Ctx) error {
+	query := query.BookingAdminViewQuery{}
+	h.parseParams(ctx, &query)
+	res, err := h.app.Queries.BookingAdminView(ctx.UserContext(), query)
+	if err != nil {
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+		return result.Error(h.i18n.TranslateFromError(*err, l, a))
+	}
+	return result.SuccessDetail(Messages.Success.Ok, res.Detail)
 }
