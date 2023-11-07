@@ -278,6 +278,10 @@ func (h srv) BookingListMyOrganized(ctx *fiber.Ctx) error {
 func (h srv) BookingView(ctx *fiber.Ctx) error {
 	query := query.BookingViewQuery{}
 	h.parseParams(ctx, &query)
+	account := current_account.Parse(ctx)
+	if account != nil {
+		query.UserName = account.Name
+	}
 	res, err := h.app.Queries.BookingView(ctx.UserContext(), query)
 	if err != nil {
 		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)

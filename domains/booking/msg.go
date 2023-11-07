@@ -9,6 +9,7 @@ type messages struct {
 	StartDateBeforeNow       string
 	OnlyAdminCanDoThisAction string
 	NotCancelable            string
+	NotFound                 string
 }
 
 var I18nMessages = messages{
@@ -20,4 +21,5 @@ var I18nMessages = messages{
 	StartDateBeforeNow:       "start_date_before_now",
 	OnlyAdminCanDoThisAction: "only_admin_can_do_this_action",
 	NotCancelable:            "not_cancelable",
+	NotFound:                 "not_found",
 }

@@ -9,7 +9,8 @@ import (
 )
 
 type BookingViewQuery struct {
-	UUID string `params:"uuid" validate:"required,object_id"`
+	UUID     string `params:"uuid" validate:"required,object_id"`
+	UserName string `params:"-"`
 }
 
 type BookingViewRes struct {
@@ -20,7 +21,7 @@ type BookingViewHandler cqrs.HandlerFunc[BookingViewQuery, *BookingViewRes]
 
 func NewBookingViewHandler(repo booking.Repo) BookingViewHandler {
 	return func(ctx context.Context, query BookingViewQuery) (*BookingViewRes, *i18np.Error) {
-		res, err := repo.GetByUUID(ctx, query.UUID)
+		res, err := repo.View(ctx, query.UUID, query.UserName)
 		if err != nil {
 			return nil, err
 		}

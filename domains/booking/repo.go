@@ -39,6 +39,7 @@ type Repo interface {
 	MarkPublic(ctx context.Context, uuid string) *i18np.Error
 	MarkPrivate(ctx context.Context, uuid string) *i18np.Error
 	GetByUUID(ctx context.Context, uuid string) (*Entity, *i18np.Error)
+	View(ctx context.Context, uuid string, userName string) (*Entity, *i18np.Error)
 	AddGuest(ctx context.Context, uuid string, guest *Guest) *i18np.Error
 	RemoveGuest(ctx context.Context, uuid string, guest WithUser, user WithUser) *i18np.Error
 	MarkGuestAsPublic(ctx context.Context, uuid string, guest WithUser, user WithUser) *i18np.Error
@@ -485,6 +486,39 @@ func (r *repo) GetByUUID(ctx context.Context, uuid string) (*Entity, *i18np.Erro
 	res, _, _err := r.helper.GetFilter(ctx, filter)
 	if _err != nil {
 		return nil, r.factory.Errors.InternalError()
+	}
+	return *res, nil
+}
+
+func (r *repo) View(ctx context.Context, uuid string, userName string) (*Entity, *i18np.Error) {
+	id, err := mongo2.TransformId(uuid)
+	if err != nil {
+		return nil, r.factory.Errors.InvalidUUID()
+	}
+	filter := bson.M{
+		"$or": []bson.M{
+			{
+				fields.UUID: id,
+				fields.IsPublic: bson.M{
+					"$eq": true,
+				},
+			},
+			{
+				fields.UUID:                id,
+				userField(userFields.Name): userName,
+			},
+			{
+				fields.UUID:                  id,
+				guestField(guestFields.Name): userName,
+			},
+		},
+	}
+	res, exists, _err := r.helper.GetFilter(ctx, filter)
+	if _err != nil {
+		return nil, r.factory.Errors.InternalError()
+	}
+	if !exists {
+		return nil, r.factory.Errors.NotFound()
 	}
 	return *res, nil
 }

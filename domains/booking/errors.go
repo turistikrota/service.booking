@@ -17,6 +17,7 @@ type Errors interface {
 	StartDateAfterEndDate() *i18np.Error
 	StartDateBeforeNow() *i18np.Error
 	NotCancelable() *i18np.Error
+	NotFound() *i18np.Error
 }
 
 type errors struct{}
@@ -57,4 +58,8 @@ func (e *errors) OnlyAdminCanDoThisAction() *i18np.Error {
 
 func (e *errors) NotCancelable() *i18np.Error {
 	return i18np.NewError(I18nMessages.NotCancelable)
+}
+
+func (e *errors) NotFound() *i18np.Error {
+	return i18np.NewError(I18nMessages.NotFound)
 }

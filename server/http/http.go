@@ -90,7 +90,7 @@ func (h srv) Listen() error {
 
 			router.Get("/my-attendees", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.BookingListMyAttendees))
 			router.Get("/my-organized", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.BookingListMyOrganized))
-			router.Get("/:uuid", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.BookingView))
+			router.Get("/:uuid", h.currentUserAccess(), h.safeCurrentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.BookingView))
 
 			// invite query routes
 			router.Get("/guest/invite/by-booking/:uuid", h.rateLimit(), h.wrapWithTimeout(h.InviteGetByBookingUUID))
@@ -103,6 +103,14 @@ func (h srv) Listen() error {
 
 func (h srv) currentAccountAccess() fiber.Handler {
 	return current_account.New(current_account.Config{
+		I18n:         h.i18n,
+		RequiredKey:  Messages.Error.RequiredAccountSelect,
+		ForbiddenKey: Messages.Error.ForbiddenAccountSelect,
+	})
+}
+
+func (h srv) safeCurrentAccountAccess() fiber.Handler {
+	return current_account.NewSafe(current_account.Config{
 		I18n:         h.i18n,
 		RequiredKey:  Messages.Error.RequiredAccountSelect,
 		ForbiddenKey: Messages.Error.ForbiddenAccountSelect,
