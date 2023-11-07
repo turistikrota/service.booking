@@ -166,6 +166,7 @@ func (h srv) BookingAdminList(ctx *fiber.Ctx) error {
 	p := utils.Pagination{}
 	h.parseQuery(ctx, &p)
 	query := query.BookingAdminListQuery{}
+	query.Pagination = &p
 	res, err := h.app.Queries.BookingAdminList(ctx.UserContext(), query)
 	if err != nil {
 		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
