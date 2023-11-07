@@ -67,6 +67,7 @@ func (h srv) Listen() error {
 			router.Post("/:postUUID", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.BookingCreate))
 			router.Patch("/:uuid/cancel", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.BookingCancel))
 			router.Patch("/:uuid/mark-private", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.BookingMarkPrivate))
+			router.Patch("/:uuid/mark-public", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.BookingMarkPublic))
 			return router
 		},
 	})

@@ -51,3 +51,15 @@ func (h srv) BookingMarkPrivate(ctx *fiber.Ctx) error {
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res)
 }
+
+func (h srv) BookingMarkPublic(ctx *fiber.Ctx) error {
+	cmd := command.BookingMarkPublicCmd{}
+	h.parseParams(ctx, &cmd)
+	cmd.UserUUID = current_user.Parse(ctx).UUID
+	res, err := h.app.Commands.BookingMarkPublic(ctx.UserContext(), cmd)
+	if err != nil {
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+		return result.Error(h.i18n.TranslateFromError(*err, l, a))
+	}
+	return result.SuccessDetail(Messages.Success.Ok, res)
+}
