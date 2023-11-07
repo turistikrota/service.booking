@@ -59,3 +59,13 @@ cache_not_runnable = "Cache çalıştırılamıyor. Konfigürasyonu kontrol edin
 get_query_failed = "Veriler getirilirken bir hata oluştu."
 update_query_not_found = "Güncellenecek veri bulunamadı."
 update_query_failed = "Veri güncellenirken bir hata oluştu."
+
+invite_subject = 'Rezervasyon Daveti'
+error_invite_email_mismatch = 'Davet edilen e-posta adresi ile davet eden e-posta adresi aynı olamaz.'
+
+error_invite_invalid_uuid = 'Geçersiz davet UUID.'
+error_invite_failed = 'Davet başarısız oldu.'
+error_invite_not_found = 'Davet bulunamadı.'
+error_invite_used = 'Davet zaten kullanılmış.'
+error_invite_deleted = 'Davet silinmiş.'
+error_invite_timeout = 'Davet zaman aşımına uğramış.'

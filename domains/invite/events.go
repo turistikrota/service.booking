@@ -24,13 +24,11 @@ type inviteEvents struct {
 	publisher events.Publisher
 	topics    config.Topics
 	i18n      *i18np.I18n
-	urls      config.Urls
 }
 
 type EventConfig struct {
 	Publisher events.Publisher
 	Topics    config.Topics
-	Urls      config.Urls
 	I18n      *i18np.I18n
 }
 
@@ -38,7 +36,6 @@ func NewEvents(cnf EventConfig) Events {
 	return &inviteEvents{
 		publisher: cnf.Publisher,
 		topics:    cnf.Topics,
-		urls:      cnf.Urls,
 		i18n:      cnf.I18n,
 	}
 }

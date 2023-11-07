@@ -86,10 +86,6 @@ type Nats struct {
 	Streams []string `env:"NATS_STREAMS" envDefault:""`
 }
 
-type Urls struct {
-	InviteAccept string `env:"URL_INVITE_ACCEPT"`
-}
-
 type App struct {
 	Protocol string `env:"PROTOCOL" envDefault:"http"`
 	DB       struct {
@@ -106,5 +102,4 @@ type App struct {
 	TokenSrv    TokenSrv
 	CacheRedis  CacheRedis
 	RSA         RSA
-	Urls        Urls
 }

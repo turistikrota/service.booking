@@ -36,7 +36,6 @@ func NewApplication(cnf Config) app.Application {
 	inviteEvents := invite.NewEvents(invite.EventConfig{
 		Topics:    cnf.App.Topics,
 		Publisher: cnf.EventEngine,
-		Urls:      cnf.App.Urls,
 		I18n:      cnf.I18n,
 	})
 
