@@ -127,3 +127,21 @@ func (h srv) InviteCreate(ctx *fiber.Ctx) error {
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res)
 }
+
+func (h srv) InviteUse(ctx *fiber.Ctx) error {
+	detail := command.BookingDetailCmd{}
+	h.parseParams(ctx, &detail)
+	cmd := command.InviteUseCmd{}
+	h.parseBody(ctx, &cmd)
+	u := current_user.Parse(ctx)
+	cmd.UserUUID = u.UUID
+	cmd.UserName = current_account.Parse(ctx).Name
+	cmd.UserEmail = u.Email
+	cmd.InviteUUID = detail.UUID
+	res, err := h.app.Commands.InviteUse(ctx.UserContext(), cmd)
+	if err != nil {
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+		return result.Error(h.i18n.TranslateFromError(*err, l, a))
+	}
+	return result.SuccessDetail(Messages.Success.Ok, res)
+}
