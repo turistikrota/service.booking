@@ -5,7 +5,7 @@ go 1.20
 require (
 	github.com/cilloparch/cillop v0.0.4
 	github.com/gofiber/fiber/v2 v2.48.0
-	github.com/turistikrota/service.shared v0.0.29
+	github.com/turistikrota/service.shared v0.0.31
 	go.mongodb.org/mongo-driver v1.12.1
 )
 

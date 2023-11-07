@@ -45,7 +45,7 @@ func NewEvents(cnf EventConfig) Events {
 
 func (e inviteEvents) Invite(event InviteEvent) {
 	subject := e.i18n.Translate(I18nMessages.InviteSubject, event.Locale)
-	template := fmt.Sprintf("owner/invite.%s", event.Locale)
+	template := fmt.Sprintf("booking/invite.%s", event.Locale)
 	_ = e.publisher.Publish(e.topics.Notify.SendMail, helper.Notify.BuildEmail(event.Email, subject, i18np.P{
 		"UserName":   event.UserName,
 		"InviteUUID": event.InviteUUID,
