@@ -84,6 +84,7 @@ func (h srv) Listen() error {
 			admin.Get("/bookings/:uuid", h.adminRoute(config.Roles.Booking.View), h.rateLimit(), h.wrapWithTimeout(h.BookingAdminView))
 
 			router.Get("/:uuid/check-availability", h.rateLimit(), h.wrapWithTimeout(h.BookingCheckAvailability))
+			router.Get("/by-owner/:uuid", h.rateLimit(), h.wrapWithTimeout(h.BookingListByOwner))
 			return router
 		},
 	})

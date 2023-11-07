@@ -198,3 +198,19 @@ func (h srv) BookingCheckAvailability(ctx *fiber.Ctx) error {
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res.IsAvailable)
 }
+
+func (h srv) BookingListByOwner(ctx *fiber.Ctx) error {
+	detail := command.BookingDetailCmd{}
+	h.parseParams(ctx, &detail)
+	p := utils.Pagination{}
+	h.parseQuery(ctx, &p)
+	query := query.BookingListByOwnerQuery{}
+	query.Pagination = &p
+	query.OwnerUUID = detail.UUID
+	res, err := h.app.Queries.BookingListByOwner(ctx.UserContext(), query)
+	if err != nil {
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+		return result.ErrorDetail(h.i18n.TranslateFromError(*err, l, a), res)
+	}
+	return result.SuccessDetail(Messages.Success.Ok, res.List)
+}
