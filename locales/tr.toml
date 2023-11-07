@@ -69,3 +69,5 @@ error_invite_not_found = 'Davet bulunamadı.'
 error_invite_used = 'Davet zaten kullanılmış.'
 error_invite_deleted = 'Davet silinmiş.'
 error_invite_timeout = 'Davet zaman aşımına uğramış.'
+
+user_expired = 'Kullanıcı süresi doldu.'

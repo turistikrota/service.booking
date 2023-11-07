@@ -68,3 +68,5 @@ error_invite_not_found = "Invite not found."
 error_invite_used = "Invite used."
 error_invite_deleted = "Invite deleted."
 error_invite_timeout = "Invite timeout."
+
+user_expired = "User expired."

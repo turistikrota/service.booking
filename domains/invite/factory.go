@@ -23,6 +23,6 @@ func (f Factory) New(email string, bookingUUID string, userName string) *Entity 
 		IsUsed:          false,
 		IsDeleted:       false,
 		CreatedAt:       &t,
-		UpdatedAt:       nil,
+		UpdatedAt:       &t,
 	}
 }
