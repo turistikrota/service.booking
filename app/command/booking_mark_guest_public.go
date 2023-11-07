@@ -22,7 +22,7 @@ type BookingGuestMarkPublicHandler cqrs.HandlerFunc[BookingGuestMarkPublicCmd, *
 
 func NewBookingGuestMarkPublicHandler(factory booking.Factory, repo booking.Repo, events booking.Events) BookingGuestMarkPublicHandler {
 	return func(ctx context.Context, cmd BookingGuestMarkPublicCmd) (*BookingGuestMarkPublicRes, *i18np.Error) {
-		_, exists, err := repo.GetDetailWithUser(ctx, cmd.UUID, cmd.UserUUID)
+		_, exists, err := repo.GetDetailWithUser(ctx, cmd.UUID, cmd.UserUUID, cmd.UserName)
 		if err != nil {
 			return nil, err
 		}

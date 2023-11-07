@@ -10,6 +10,7 @@ import (
 
 type BookingCancelCmd struct {
 	UserUUID string `params:"-"`
+	UserName string `params:"-"`
 	UUID     string `params:"uuid" validate:"required,object_id"`
 }
 
@@ -19,7 +20,7 @@ type BookingCancelHandler cqrs.HandlerFunc[BookingCancelCmd, *BookingCancelRes]
 
 func NewBookingCancelHandler(factory booking.Factory, repo booking.Repo, events booking.Events) BookingCancelHandler {
 	return func(ctx context.Context, cmd BookingCancelCmd) (*BookingCancelRes, *i18np.Error) {
-		book, exists, err := repo.GetDetailWithUser(ctx, cmd.UUID, cmd.UserUUID)
+		book, exists, err := repo.GetDetailWithUser(ctx, cmd.UUID, cmd.UserUUID, cmd.UserName)
 		if err != nil {
 			return nil, err
 		}

@@ -50,7 +50,7 @@ type Repo interface {
 	ListByOwner(ctx context.Context, ownerUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
 	ListByPost(ctx context.Context, postUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
 	ListByUser(ctx context.Context, userName string, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
-	GetDetailWithUser(ctx context.Context, uuid string, userUUID string) (*Entity, *bool, *i18np.Error)
+	GetDetailWithUser(ctx context.Context, uuid string, userUUID string, userName string) (*Entity, *bool, *i18np.Error)
 	CheckAvailability(ctx context.Context, postUUID string, startDate time.Time, endDate time.Time) (bool, *i18np.Error)
 }
 
@@ -459,7 +459,7 @@ func (r *repo) ListByUser(ctx context.Context, userName string, listConf list.Co
 	}, nil
 }
 
-func (r *repo) GetDetailWithUser(ctx context.Context, uuid string, userUUID string) (*Entity, *bool, *i18np.Error) {
+func (r *repo) GetDetailWithUser(ctx context.Context, uuid string, userUUID string, userName string) (*Entity, *bool, *i18np.Error) {
 	id, err := mongo2.TransformId(uuid)
 	if err != nil {
 		return nil, nil, r.factory.Errors.InvalidUUID()
@@ -467,6 +467,7 @@ func (r *repo) GetDetailWithUser(ctx context.Context, uuid string, userUUID stri
 	filter := bson.M{
 		fields.UUID:                id,
 		userField(userFields.UUID): userUUID,
+		userField(userFields.Name): userName,
 	}
 	res, exists, _err := r.helper.GetFilter(ctx, filter)
 	if _err != nil {

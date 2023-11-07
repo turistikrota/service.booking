@@ -34,6 +34,7 @@ func (h srv) BookingCancel(ctx *fiber.Ctx) error {
 	cmd := command.BookingCancelCmd{}
 	h.parseParams(ctx, &cmd)
 	cmd.UserUUID = current_user.Parse(ctx).UUID
+	cmd.UserName = current_account.Parse(ctx).Name
 	res, err := h.app.Commands.BookingCancel(ctx.UserContext(), cmd)
 	if err != nil {
 		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
@@ -46,6 +47,7 @@ func (h srv) BookingMarkPrivate(ctx *fiber.Ctx) error {
 	cmd := command.BookingMarkPrivateCmd{}
 	h.parseParams(ctx, &cmd)
 	cmd.UserUUID = current_user.Parse(ctx).UUID
+	cmd.UserName = current_account.Parse(ctx).Name
 	res, err := h.app.Commands.BookingMarkPrivate(ctx.UserContext(), cmd)
 	if err != nil {
 		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
@@ -58,6 +60,7 @@ func (h srv) BookingMarkPublic(ctx *fiber.Ctx) error {
 	cmd := command.BookingMarkPublicCmd{}
 	h.parseParams(ctx, &cmd)
 	cmd.UserUUID = current_user.Parse(ctx).UUID
+	cmd.UserName = current_account.Parse(ctx).Name
 	res, err := h.app.Commands.BookingMarkPublic(ctx.UserContext(), cmd)
 	if err != nil {
 		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)

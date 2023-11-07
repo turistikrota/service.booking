@@ -25,7 +25,7 @@ type InviteCreateHandler cqrs.HandlerFunc[InviteCreateCmd, *InviteCreateRes]
 func NewInviteCreateHandler(bookingFactory booking.Factory, bookingRepo booking.Repo, factory invite.Factory, repo invite.Repository, events invite.Events) InviteCreateHandler {
 	return func(ctx context.Context, cmd InviteCreateCmd) (*InviteCreateRes, *i18np.Error) {
 		fmt.Println("check 1")
-		_, exists, err := bookingRepo.GetDetailWithUser(ctx, cmd.BookingUUID, cmd.UserUUID)
+		_, exists, err := bookingRepo.GetDetailWithUser(ctx, cmd.BookingUUID, cmd.UserUUID, cmd.UserName)
 		if err != nil {
 			return nil, err
 		}

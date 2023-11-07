@@ -22,7 +22,7 @@ type BookingRemoveGuestHandler cqrs.HandlerFunc[BookingRemoveGuestCmd, *BookingR
 
 func NewBookingRemoveGuestHandler(factory booking.Factory, repo booking.Repo, events booking.Events) BookingRemoveGuestHandler {
 	return func(ctx context.Context, cmd BookingRemoveGuestCmd) (*BookingRemoveGuestRes, *i18np.Error) {
-		_, exists, err := repo.GetDetailWithUser(ctx, cmd.UUID, cmd.UserUUID)
+		_, exists, err := repo.GetDetailWithUser(ctx, cmd.UUID, cmd.UserUUID, cmd.UserName)
 		if err != nil {
 			return nil, err
 		}

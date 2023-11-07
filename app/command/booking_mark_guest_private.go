@@ -22,7 +22,7 @@ type BookingGuestMarkPrivateHandler cqrs.HandlerFunc[BookingGuestMarkPrivateCmd,
 
 func NewBookingGuestMarkPrivateHandler(factory booking.Factory, repo booking.Repo, events booking.Events) BookingGuestMarkPrivateHandler {
 	return func(ctx context.Context, cmd BookingGuestMarkPrivateCmd) (*BookingGuestMarkPrivateRes, *i18np.Error) {
-		_, exists, err := repo.GetDetailWithUser(ctx, cmd.UUID, cmd.UserUUID)
+		_, exists, err := repo.GetDetailWithUser(ctx, cmd.UUID, cmd.UserUUID, cmd.UserName)
 		if err != nil {
 			return nil, err
 		}

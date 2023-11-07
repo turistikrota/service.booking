@@ -10,6 +10,7 @@ import (
 
 type BookingMarkPublicCmd struct {
 	UserUUID string `params:"-"`
+	UserName string `params:"-"`
 	UUID     string `params:"uuid" validate:"required,object_id"`
 }
 
@@ -19,7 +20,7 @@ type BookingMarkPublicHandler cqrs.HandlerFunc[BookingMarkPublicCmd, *BookingMar
 
 func NewBookingMarkPublicHandler(factory booking.Factory, repo booking.Repo) BookingMarkPublicHandler {
 	return func(ctx context.Context, cmd BookingMarkPublicCmd) (*BookingMarkPublicRes, *i18np.Error) {
-		_, exists, err := repo.GetDetailWithUser(ctx, cmd.UUID, cmd.UserUUID)
+		_, exists, err := repo.GetDetailWithUser(ctx, cmd.UUID, cmd.UserUUID, cmd.UserName)
 		if err != nil {
 			return nil, err
 		}
