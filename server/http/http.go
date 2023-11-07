@@ -71,6 +71,7 @@ func (h srv) Listen() error {
 			router.Delete("/:uuid/guest", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.BookingGuestRemove))
 			router.Patch("/:uuid/guest/mark-public", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.BookingGuestMarkPublic))
 			router.Patch("/:uuid/guest/mark-private", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.BookingGuestMarkPrivate))
+			router.Post("/guest/invite", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.InviteCreate))
 			return router
 		},
 	})
