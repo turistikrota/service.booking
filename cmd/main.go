@@ -40,6 +40,7 @@ func main() {
 		EventEngine: eventEngine,
 		CacheSrv:    cache,
 		Validator:   valid,
+		I18n:        i18n,
 		MongoDB:     mongo,
 	})
 	r := redis.New(&redis.Config{
