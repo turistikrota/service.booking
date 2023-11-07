@@ -296,3 +296,14 @@ func (h srv) InviteGetByBookingUUID(ctx *fiber.Ctx) error {
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res.Invites)
 }
+
+func (h srv) InviteGetByEmail(ctx *fiber.Ctx) error {
+	query := query.InviteGetByEmailQuery{}
+	query.UserEmail = current_user.Parse(ctx).Email
+	res, err := h.app.Queries.InviteGetByEmail(ctx.UserContext(), query)
+	if err != nil {
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+		return result.ErrorDetail(h.i18n.TranslateFromError(*err, l, a), res)
+	}
+	return result.SuccessDetail(Messages.Success.Ok, res.Invites)
+}

@@ -94,6 +94,7 @@ func (h srv) Listen() error {
 
 			// invite query routes
 			router.Get("/guest/invite/by-booking/:uuid", h.rateLimit(), h.wrapWithTimeout(h.InviteGetByBookingUUID))
+			router.Get("/guest/invite/by-email", h.rateLimit(), h.wrapWithTimeout(h.InviteGetByEmail))
 			return router
 		},
 	})
