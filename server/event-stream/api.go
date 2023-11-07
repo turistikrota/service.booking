@@ -30,3 +30,25 @@ func (s srv) OnBookingValidationFail(data []byte) {
 	}
 	_, _ = s.app.Commands.BookingValidationFailed(context.Background(), cmd)
 }
+
+func (s srv) OnBookingPaySuccess(data []byte) {
+	fmt.Println("OnBookingPaySuccess")
+	cmd := command.BookingPaySuccessCmd{}
+	err := json.Unmarshal(data, &cmd)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	_, _ = s.app.Commands.BookingPaySuccess(context.Background(), cmd)
+}
+
+func (s srv) OnBookingPayTimeout(data []byte) {
+	fmt.Println("OnBookingPayTimeout")
+	cmd := command.BookingPayTimeoutCmd{}
+	err := json.Unmarshal(data, &cmd)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	_, _ = s.app.Commands.BookingPayTimeout(context.Background(), cmd)
+}

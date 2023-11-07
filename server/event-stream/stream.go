@@ -33,5 +33,13 @@ func (s srv) Listen() error {
 		return err
 	}
 	err = s.engine.Subscribe(s.topics.Booking.ValidationFail, s.OnBookingValidationFail)
+	if err != nil {
+		return err
+	}
+	err = s.engine.Subscribe(s.topics.Booking.PaySuccess, s.OnBookingPaySuccess)
+	if err != nil {
+		return err
+	}
+	err = s.engine.Subscribe(s.topics.Booking.PayTimeout, s.OnBookingPayTimeout)
 	return err
 }
