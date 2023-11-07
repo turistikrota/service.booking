@@ -63,3 +63,19 @@ func (h srv) BookingMarkPublic(ctx *fiber.Ctx) error {
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res)
 }
+
+func (h srv) BookingGuestRemove(ctx *fiber.Ctx) error {
+	detail := command.BookingDetailCmd{}
+	h.parseParams(ctx, &detail)
+	cmd := command.BookingRemoveGuestCmd{}
+	h.parseBody(ctx, &cmd)
+	cmd.UserUUID = current_user.Parse(ctx).UUID
+	cmd.UserName = current_account.Parse(ctx).Name
+	cmd.UUID = detail.UUID
+	res, err := h.app.Commands.BookingRemoveGuest(ctx.UserContext(), cmd)
+	if err != nil {
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+		return result.Error(h.i18n.TranslateFromError(*err, l, a))
+	}
+	return result.SuccessDetail(Messages.Success.Ok, res)
+}
