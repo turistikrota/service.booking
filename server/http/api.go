@@ -259,3 +259,18 @@ func (h srv) BookingListMyAttendees(ctx *fiber.Ctx) error {
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res.List)
 }
+
+func (h srv) BookingListMyOrganized(ctx *fiber.Ctx) error {
+	p := utils.Pagination{}
+	h.parseQuery(ctx, &p)
+	query := query.BookingListMyOrganizedQuery{}
+	query.Pagination = &p
+	query.UserUUID = current_user.Parse(ctx).UUID
+	query.UserName = current_account.Parse(ctx).Name
+	res, err := h.app.Queries.BookingListMyOrganized(ctx.UserContext(), query)
+	if err != nil {
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+		return result.ErrorDetail(h.i18n.TranslateFromError(*err, l, a), res)
+	}
+	return result.SuccessDetail(Messages.Success.Ok, res.List)
+}

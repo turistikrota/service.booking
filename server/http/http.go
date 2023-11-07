@@ -89,6 +89,7 @@ func (h srv) Listen() error {
 			router.Get("/by-user/:username", h.rateLimit(), h.wrapWithTimeout(h.BookingListByUser))
 
 			router.Get("/my-attendees", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.BookingListMyAttendees))
+			router.Get("/my-organized", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.BookingListMyOrganized))
 			return router
 		},
 	})
