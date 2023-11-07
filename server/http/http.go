@@ -65,6 +65,8 @@ func (h srv) Listen() error {
 		CreateHandler: func(router fiber.Router) fiber.Router {
 			router.Use(h.cors(), h.deviceUUID())
 			router.Post("/:postUUID", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.BookingCreate))
+			router.Patch("/:uuid/cancel", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.BookingCancel))
+			router.Patch("/:uuid/mark-private", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.BookingMarkPrivate))
 			return router
 		},
 	})
