@@ -11,8 +11,8 @@ import (
 
 type BookingCheckAvailabilityQuery struct {
 	PostUUID  string `query:"-"`
-	StartDate string `query:"start_date" validate:"required,datetime=2006-01-02"`
-	EndDate   string `query:"end_date" validate:"required,datetime=2006-01-02"`
+	StartDate string `query:"start" validate:"required,datetime=2006-01-02"`
+	EndDate   string `query:"end" validate:"required,datetime=2006-01-02"`
 }
 
 type BookingCheckAvailabilityRes struct {
