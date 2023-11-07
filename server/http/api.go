@@ -27,3 +27,15 @@ func (h srv) BookingCreate(ctx *fiber.Ctx) error {
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res)
 }
+
+func (h srv) BookingCancel(ctx *fiber.Ctx) error {
+	cmd := command.BookingCancelCmd{}
+	h.parseParams(ctx, &cmd)
+	cmd.UserUUID = current_user.Parse(ctx).UUID
+	res, err := h.app.Commands.BookingCancel(ctx.UserContext(), cmd)
+	if err != nil {
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+		return result.Error(h.i18n.TranslateFromError(*err, l, a))
+	}
+	return result.SuccessDetail(Messages.Success.Ok, res)
+}
