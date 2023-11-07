@@ -230,3 +230,17 @@ func (h srv) BookingListByPost(ctx *fiber.Ctx) error {
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res.List)
 }
+
+func (h srv) BookingListByUser(ctx *fiber.Ctx) error {
+	p := utils.Pagination{}
+	h.parseQuery(ctx, &p)
+	query := query.BookingListByUserQuery{}
+	h.parseParams(ctx, &query)
+	query.Pagination = &p
+	res, err := h.app.Queries.BookingListByUser(ctx.UserContext(), query)
+	if err != nil {
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+		return result.ErrorDetail(h.i18n.TranslateFromError(*err, l, a), res)
+	}
+	return result.SuccessDetail(Messages.Success.Ok, res.List)
+}

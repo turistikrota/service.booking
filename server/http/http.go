@@ -86,6 +86,7 @@ func (h srv) Listen() error {
 			router.Get("/:uuid/check-availability", h.rateLimit(), h.wrapWithTimeout(h.BookingCheckAvailability))
 			router.Get("/by-owner/:uuid", h.rateLimit(), h.wrapWithTimeout(h.BookingListByOwner))
 			router.Get("/by-post/:uuid", h.rateLimit(), h.wrapWithTimeout(h.BookingListByPost))
+			router.Get("/by-user/:username", h.rateLimit(), h.wrapWithTimeout(h.BookingListByUser))
 			return router
 		},
 	})
