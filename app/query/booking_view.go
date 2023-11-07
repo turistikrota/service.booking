@@ -13,7 +13,7 @@ type BookingViewQuery struct {
 }
 
 type BookingViewRes struct {
-	Res booking.BookingViewDto
+	Detail booking.BookingViewDto
 }
 
 type BookingViewHandler cqrs.HandlerFunc[BookingViewQuery, *BookingViewRes]
@@ -25,7 +25,7 @@ func NewBookingViewHandler(repo booking.Repo) BookingViewHandler {
 			return nil, err
 		}
 		return &BookingViewRes{
-			Res: res.ToViewDto(),
+			Detail: res.ToViewDto(),
 		}, nil
 	}
 }

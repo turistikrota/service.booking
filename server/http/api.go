@@ -274,3 +274,14 @@ func (h srv) BookingListMyOrganized(ctx *fiber.Ctx) error {
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res.List)
 }
+
+func (h srv) BookingView(ctx *fiber.Ctx) error {
+	query := query.BookingViewQuery{}
+	h.parseParams(ctx, &query)
+	res, err := h.app.Queries.BookingView(ctx.UserContext(), query)
+	if err != nil {
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+		return result.ErrorDetail(h.i18n.TranslateFromError(*err, l, a), res)
+	}
+	return result.SuccessDetail(Messages.Success.Ok, res.Detail)
+}
