@@ -20,25 +20,25 @@ type Entity struct {
 }
 
 type User struct {
-	UUID string `json:"uuid"`
-	Name string `json:"name"`
+	UUID string `json:"uuid" bson:"uuid"`
+	Name string `json:"name" bson:"name"`
 }
 
 type Guest struct {
-	UUID     string `json:"uuid"`
-	Name     string `json:"name"`
-	IsPublic bool   `json:"isPublic"`
+	UUID     string `json:"uuid" bson:"uuid"`
+	Name     string `json:"name" bson:"name"`
+	IsPublic bool   `json:"isPublic" bson:"is_public"`
 }
 
 type Day struct {
-	Date  time.Time `json:"date"`
-	Price float64   `json:"price"`
+	Date  time.Time `json:"date" bson:"date"`
+	Price float64   `json:"price" bson:"price"`
 }
 
 type People struct {
-	Adult int `json:"adult" validate:"required,gt=0"`
-	Kid   int `json:"kid" validate:"gte=0"`
-	Baby  int `json:"baby" validate:"gte=0"`
+	Adult int `json:"adult" bson:"adult" validate:"required,gt=0"`
+	Kid   int `json:"kid" bson:"kid" validate:"gte=0"`
+	Baby  int `json:"baby" bson:"baby" validate:"gte=0"`
 }
 
 type State string
