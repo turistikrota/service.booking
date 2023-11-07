@@ -184,3 +184,17 @@ func (h srv) BookingAdminView(ctx *fiber.Ctx) error {
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res.Detail)
 }
+
+func (h srv) BookingCheckAvailability(ctx *fiber.Ctx) error {
+	detail := command.BookingDetailCmd{}
+	h.parseParams(ctx, &detail)
+	query := query.BookingCheckAvailabilityQuery{}
+	h.parseQuery(ctx, &query)
+	query.PostUUID = detail.UUID
+	res, err := h.app.Queries.BookingCheckAvailability(ctx.UserContext(), query)
+	if err != nil {
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+		return result.ErrorDetail(h.i18n.TranslateFromError(*err, l, a), res)
+	}
+	return result.SuccessDetail(Messages.Success.Ok, res.IsAvailable)
+}

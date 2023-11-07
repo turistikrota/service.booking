@@ -82,6 +82,8 @@ func (h srv) Listen() error {
 			admin := router.Group("/admin", h.currentUserAccess(), h.requiredAccess())
 			admin.Get("/bookings", h.adminRoute(config.Roles.Booking.List), h.rateLimit(), h.wrapWithTimeout(h.BookingAdminList))
 			admin.Get("/bookings/:uuid", h.adminRoute(config.Roles.Booking.View), h.rateLimit(), h.wrapWithTimeout(h.BookingAdminView))
+
+			router.Get("/:uuid/check-availability", h.rateLimit(), h.wrapWithTimeout(h.BookingCheckAvailability))
 			return router
 		},
 	})
