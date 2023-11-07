@@ -1,32 +1,168 @@
 package booking
 
-type BookingListDto struct{}
+import "time"
 
-type BookingViewDto struct{}
+type BookingListDto struct {
+	UUID       string    `json:"uuid"`
+	People     People    `json:"people"`
+	Guests     []Guest   `json:"guests"`
+	State      State     `json:"state"`
+	IsPublic   *bool     `json:"isPublic"`
+	TotalPrice float64   `json:"totalPrice"`
+	StartDate  time.Time `json:"startDate"`
+	EndDate    time.Time `json:"endDate"`
+	CreatedAt  time.Time `json:"createdAt"`
+}
 
-type BookingAdminViewDto struct{}
+type BookingViewDto struct {
+	UUID       string    `json:"uuid"`
+	PostUUID   string    `json:"postUUID"`
+	OwnerUUID  string    `json:"ownerUUID"`
+	People     People    `json:"people"`
+	Guests     []Guest   `json:"guests"`
+	Days       []Day     `json:"days"`
+	State      State     `json:"state"`
+	IsPublic   *bool     `json:"isPublic"`
+	TotalPrice float64   `json:"totalPrice"`
+	StartDate  time.Time `json:"startDate"`
+	EndDate    time.Time `json:"endDate"`
+	CreatedAt  time.Time `json:"createdAt"`
+	UpdatedAt  time.Time `json:"updatedAt"`
+}
 
-type BookingAdminListDto struct{}
+type BookingAdminViewDto struct {
+	UUID       string    `json:"uuid"`
+	PostUUID   string    `json:"postUUID"`
+	OwnerUUID  string    `json:"ownerUUID"`
+	User       User      `json:"user"`
+	People     People    `json:"people"`
+	Guests     []Guest   `json:"guests"`
+	Days       []Day     `json:"days"`
+	State      State     `json:"state"`
+	IsPublic   *bool     `json:"isPublic"`
+	TotalPrice float64   `json:"totalPrice"`
+	StartDate  time.Time `json:"startDate"`
+	EndDate    time.Time `json:"endDate"`
+	CreatedAt  time.Time `json:"createdAt"`
+	UpdatedAt  time.Time `json:"updatedAt"`
+}
 
-type BookingOwnerViewDto struct{}
+type BookingAdminListDto struct {
+	UUID       string    `json:"uuid"`
+	User       User      `json:"user"`
+	People     People    `json:"people"`
+	Guests     []Guest   `json:"guests"`
+	State      State     `json:"state"`
+	IsPublic   *bool     `json:"isPublic"`
+	TotalPrice float64   `json:"totalPrice"`
+	StartDate  time.Time `json:"startDate"`
+	EndDate    time.Time `json:"endDate"`
+	CreatedAt  time.Time `json:"createdAt"`
+}
 
-type BookingOwnerListDto struct{}
+type BookingOwnerViewDto struct {
+	UUID       string    `json:"uuid"`
+	PostUUID   string    `json:"postUUID"`
+	OwnerUUID  string    `json:"ownerUUID"`
+	People     People    `json:"people"`
+	Guests     []Guest   `json:"guests"`
+	Days       []Day     `json:"days"`
+	State      State     `json:"state"`
+	IsPublic   *bool     `json:"isPublic"`
+	TotalPrice float64   `json:"totalPrice"`
+	StartDate  time.Time `json:"startDate"`
+	EndDate    time.Time `json:"endDate"`
+	CreatedAt  time.Time `json:"createdAt"`
+	UpdatedAt  time.Time `json:"updatedAt"`
+}
+
+type BookingOwnerListDto struct {
+	UUID       string    `json:"uuid"`
+	People     People    `json:"people"`
+	Guests     []Guest   `json:"guests"`
+	State      State     `json:"state"`
+	IsPublic   *bool     `json:"isPublic"`
+	TotalPrice float64   `json:"totalPrice"`
+	StartDate  time.Time `json:"startDate"`
+	EndDate    time.Time `json:"endDate"`
+	CreatedAt  time.Time `json:"createdAt"`
+}
 
 func (e *Entity) ToListDto() BookingListDto {
-	return BookingListDto{}
+	return BookingListDto{
+		UUID:       e.UUID,
+		People:     e.People,
+		Guests:     e.Guests,
+		State:      e.State,
+		IsPublic:   e.IsPublic,
+		TotalPrice: e.TotalPrice,
+		StartDate:  e.StartDate,
+		EndDate:    e.EndDate,
+		CreatedAt:  e.CreatedAt,
+	}
 }
 func (e *Entity) ToOwnerListDto() BookingOwnerListDto {
-	return BookingOwnerListDto{}
+	return BookingOwnerListDto{
+		UUID:       e.UUID,
+		People:     e.People,
+		Guests:     e.Guests,
+		State:      e.State,
+		IsPublic:   e.IsPublic,
+		TotalPrice: e.TotalPrice,
+		StartDate:  e.StartDate,
+		EndDate:    e.EndDate,
+		CreatedAt:  e.CreatedAt,
+	}
 }
 
 func (e *Entity) ToViewDto() BookingViewDto {
-	return BookingViewDto{}
+	return BookingViewDto{
+		UUID:       e.UUID,
+		PostUUID:   e.PostUUID,
+		OwnerUUID:  e.OwnerUUID,
+		People:     e.People,
+		Guests:     e.Guests,
+		State:      e.State,
+		IsPublic:   e.IsPublic,
+		Days:       e.Days,
+		TotalPrice: e.TotalPrice,
+		StartDate:  e.StartDate,
+		EndDate:    e.EndDate,
+		CreatedAt:  e.CreatedAt,
+		UpdatedAt:  e.UpdatedAt,
+	}
 }
 
 func (e *Entity) ToAdminViewDto() BookingAdminViewDto {
-	return BookingAdminViewDto{}
+	return BookingAdminViewDto{
+		UUID:       e.UUID,
+		PostUUID:   e.PostUUID,
+		OwnerUUID:  e.OwnerUUID,
+		People:     e.People,
+		User:       e.User,
+		Guests:     e.Guests,
+		State:      e.State,
+		IsPublic:   e.IsPublic,
+		Days:       e.Days,
+		TotalPrice: e.TotalPrice,
+		StartDate:  e.StartDate,
+		EndDate:    e.EndDate,
+		CreatedAt:  e.CreatedAt,
+		UpdatedAt:  e.UpdatedAt,
+	}
 }
 
 func (e *Entity) ToAdminListDto() BookingAdminListDto {
-	return BookingAdminListDto{}
+	return BookingAdminListDto{
+		UUID:       e.UUID,
+		People:     e.People,
+		Guests:     e.Guests,
+		State:      e.State,
+		IsPublic:   e.IsPublic,
+		TotalPrice: e.TotalPrice,
+		StartDate:  e.StartDate,
+		EndDate:    e.EndDate,
+		CreatedAt:  e.CreatedAt,
+		User:       e.User,
+	}
 }
