@@ -40,6 +40,9 @@ func NewInviteUseHandler(factory invite.Factory, repo invite.Repository, booking
 		if res.CreatedAt.Add(24 * time.Hour).Before(time.Now()) {
 			return nil, factory.Errors.Timeout()
 		}
+		if res.CreatorUserName == cmd.UserName {
+			return nil, factory.Errors.SameUser()
+		}
 		err = bookingRepo.AddGuest(ctx, res.BookingUUID, &booking.Guest{
 			UUID:     cmd.UserUUID,
 			Name:     cmd.UserName,

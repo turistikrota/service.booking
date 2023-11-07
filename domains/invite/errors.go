@@ -10,6 +10,7 @@ type Errors interface {
 	Used() *i18np.Error
 	Deleted() *i18np.Error
 	Timeout() *i18np.Error
+	SameUser() *i18np.Error
 }
 
 type inviteErrors struct{}
@@ -44,4 +45,8 @@ func (e *inviteErrors) Deleted() *i18np.Error {
 
 func (e *inviteErrors) Timeout() *i18np.Error {
 	return i18np.NewError(I18nMessages.Timeout)
+}
+
+func (e *inviteErrors) SameUser() *i18np.Error {
+	return i18np.NewError(I18nMessages.SameUser)
 }
