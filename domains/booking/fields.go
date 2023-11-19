@@ -1,20 +1,20 @@
 package booking
 
 type fieldsType struct {
-	UUID       string
-	PostUUID   string
-	OwnerUUID  string
-	People     string
-	User       string
-	Guests     string
-	Days       string
-	State      string
-	IsPublic   string
-	TotalPrice string
-	StartDate  string
-	EndDate    string
-	CreatedAt  string
-	UpdatedAt  string
+	UUID         string
+	ListingUUID  string
+	BusinessUUID string
+	People       string
+	User         string
+	Guests       string
+	Days         string
+	State        string
+	IsPublic     string
+	TotalPrice   string
+	StartDate    string
+	EndDate      string
+	CreatedAt    string
+	UpdatedAt    string
 }
 
 type peopleFieldsType struct {
@@ -40,20 +40,20 @@ type dayFieldsType struct {
 }
 
 var fields = fieldsType{
-	UUID:       "_id",
-	PostUUID:   "post_uuid",
-	OwnerUUID:  "owner_uuid",
-	People:     "people",
-	User:       "user",
-	Guests:     "guests",
-	Days:       "days",
-	State:      "state",
-	IsPublic:   "is_public",
-	TotalPrice: "total_price",
-	StartDate:  "start_date",
-	EndDate:    "end_date",
-	CreatedAt:  "createdAt",
-	UpdatedAt:  "updatedAt",
+	UUID:         "_id",
+	ListingUUID:  "listing_uuid",
+	BusinessUUID: "business_uuid",
+	People:       "people",
+	User:         "user",
+	Guests:       "guests",
+	Days:         "days",
+	State:        "state",
+	IsPublic:     "is_public",
+	TotalPrice:   "total_price",
+	StartDate:    "start_date",
+	EndDate:      "end_date",
+	CreatedAt:    "createdAt",
+	UpdatedAt:    "updatedAt",
 }
 
 var peopleFields = peopleFieldsType{

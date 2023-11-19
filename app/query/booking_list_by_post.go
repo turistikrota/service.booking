@@ -12,18 +12,18 @@ import (
 	"github.com/turistikrota/service.booking/pkg/utils"
 )
 
-type BookingListByPostQuery struct {
+type BookingListByListingQuery struct {
 	*utils.Pagination
-	PostUUID string `params:"uuid" query:"-" validate:"required,object_id"`
+	ListingUUID string `params:"uuid" query:"-" validate:"required,object_id"`
 }
 
-type BookingListByPostRes struct {
-	List *list.Result[booking.BookingOwnerListDto]
+type BookingListByListingRes struct {
+	List *list.Result[booking.BookingBusinessListDto]
 }
 
-type BookingListByPostHandler cqrs.HandlerFunc[BookingListByPostQuery, *BookingListByPostRes]
+type BookingListByListingHandler cqrs.HandlerFunc[BookingListByListingQuery, *BookingListByListingRes]
 
-func NewBookingListByPostHandler(repo booking.Repo, cacheSrv cache.Service) BookingListByPostHandler {
+func NewBookingListByListingHandler(repo booking.Repo, cacheSrv cache.Service) BookingListByListingHandler {
 	cache := cache.New[*list.Result[*booking.Entity]](cacheSrv)
 
 	createCacheEntity := func() *list.Result[*booking.Entity] {
@@ -36,25 +36,25 @@ func NewBookingListByPostHandler(repo booking.Repo, cacheSrv cache.Service) Book
 			IsPrev:        false,
 		}
 	}
-	return func(ctx context.Context, query BookingListByPostQuery) (*BookingListByPostRes, *i18np.Error) {
+	return func(ctx context.Context, query BookingListByListingQuery) (*BookingListByListingRes, *i18np.Error) {
 		query.Default()
 		offset := (*query.Page - 1) * *query.Limit
 		cacheHandler := func() (*list.Result[*booking.Entity], *i18np.Error) {
-			return repo.ListByPost(ctx, query.PostUUID, list.Config{
+			return repo.ListByListing(ctx, query.ListingUUID, list.Config{
 				Offset: offset,
 				Limit:  *query.Limit,
 			})
 		}
-		res, err := cache.Creator(createCacheEntity).Handler(cacheHandler).Get(ctx, fmt.Sprintf("booking:by_post:uuid:%s:offset:%v:limit:%v", query.PostUUID, offset, *query.Limit))
+		res, err := cache.Creator(createCacheEntity).Handler(cacheHandler).Get(ctx, fmt.Sprintf("booking:by_listing:uuid:%s:offset:%v:limit:%v", query.ListingUUID, offset, *query.Limit))
 		if err != nil {
 			return nil, err
 		}
-		li := make([]booking.BookingOwnerListDto, len(res.List))
+		li := make([]booking.BookingBusinessListDto, len(res.List))
 		for i, v := range res.List {
-			li[i] = v.ToOwnerListDto()
+			li[i] = v.ToBusinessListDto()
 		}
-		return &BookingListByPostRes{
-			List: &list.Result[booking.BookingOwnerListDto]{
+		return &BookingListByListingRes{
+			List: &list.Result[booking.BookingBusinessListDto]{
 				List:          li,
 				Total:         res.Total,
 				FilteredTotal: res.FilteredTotal,

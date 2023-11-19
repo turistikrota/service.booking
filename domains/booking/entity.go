@@ -3,20 +3,20 @@ package booking
 import "time"
 
 type Entity struct {
-	UUID       string    `json:"uuid" bson:"_id,omitempty"`
-	PostUUID   string    `json:"postUUID" bson:"post_uuid"`
-	OwnerUUID  string    `json:"ownerUUID" bson:"owner_uuid"`
-	People     People    `json:"people" bson:"people"`
-	User       User      `json:"user" bson:"user"`
-	Guests     []Guest   `json:"guests" bson:"guests"`
-	Days       []Day     `json:"days" bson:"days"`
-	State      State     `json:"state" bson:"state"`
-	IsPublic   *bool     `json:"isPublic" bson:"is_public"`
-	TotalPrice float64   `json:"totalPrice" bson:"total_price"`
-	StartDate  time.Time `json:"startDate" bson:"start_date"`
-	EndDate    time.Time `json:"endDate" bson:"end_date"`
-	CreatedAt  time.Time `json:"createdAt" bson:"created_at"`
-	UpdatedAt  time.Time `json:"updatedAt" bson:"updated_at"`
+	UUID         string    `json:"uuid" bson:"_id,omitempty"`
+	ListingUUID  string    `json:"listingUUID" bson:"listing_uuid"`
+	BusinessUUID string    `json:"businessUUID" bson:"business_uuid"`
+	People       People    `json:"people" bson:"people"`
+	User         User      `json:"user" bson:"user"`
+	Guests       []Guest   `json:"guests" bson:"guests"`
+	Days         []Day     `json:"days" bson:"days"`
+	State        State     `json:"state" bson:"state"`
+	IsPublic     *bool     `json:"isPublic" bson:"is_public"`
+	TotalPrice   float64   `json:"totalPrice" bson:"total_price"`
+	StartDate    time.Time `json:"startDate" bson:"start_date"`
+	EndDate      time.Time `json:"endDate" bson:"end_date"`
+	CreatedAt    time.Time `json:"createdAt" bson:"created_at"`
+	UpdatedAt    time.Time `json:"updatedAt" bson:"updated_at"`
 }
 
 type User struct {

@@ -32,8 +32,8 @@ type Queries struct {
 	BookingAdminList         query.BookingAdminListHandler
 	BookingAdminView         query.BookingAdminViewHandler
 	BookingCheckAvailability query.BookingCheckAvailabilityHandler
-	BookingListByOwner       query.BookingListByOwnerHandler
-	BookingListByPost        query.BookingListByPostHandler
+	BookingListByBusiness    query.BookingListByBusinessHandler
+	BookingListByListing     query.BookingListByListingHandler
 	BookingListByUser        query.BookingListByUserHandler
 	BookingListMyAttendees   query.BookingListMyAttendeesHandler
 	BookingListMyOrganized   query.BookingListMyOrganizedHandler

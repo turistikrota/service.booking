@@ -10,9 +10,9 @@ import (
 )
 
 type BookingCheckAvailabilityQuery struct {
-	PostUUID  string `query:"-"`
-	StartDate string `query:"start" validate:"required,datetime=2006-01-02"`
-	EndDate   string `query:"end" validate:"required,datetime=2006-01-02"`
+	ListingUUID string `query:"-"`
+	StartDate   string `query:"start" validate:"required,datetime=2006-01-02"`
+	EndDate     string `query:"end" validate:"required,datetime=2006-01-02"`
 }
 
 type BookingCheckAvailabilityRes struct {
@@ -25,7 +25,7 @@ func NewBookingCheckAvailabilityHandler(repo booking.Repo) BookingCheckAvailabil
 	return func(ctx context.Context, query BookingCheckAvailabilityQuery) (*BookingCheckAvailabilityRes, *i18np.Error) {
 		startDate, _ := time.Parse("2006-01-02", query.StartDate)
 		endDate, _ := time.Parse("2006-01-02", query.EndDate)
-		res, err := repo.CheckAvailability(ctx, query.PostUUID, startDate, endDate)
+		res, err := repo.CheckAvailability(ctx, query.ListingUUID, startDate, endDate)
 		if err != nil {
 			return nil, err
 		}
