@@ -19,12 +19,12 @@ type WithUser struct {
 }
 
 type Validated struct {
-	UUID       string
-	PostUUID   string
-	OwnerUUID  string
-	OwnerName  string
-	TotalPrice float64
-	Days       []Day
+	UUID         string
+	PostUUID     string
+	BusinessUUID string
+	BusinessName string
+	TotalPrice   float64
+	Days         []Day
 }
 
 type Repo interface {
@@ -47,7 +47,7 @@ type Repo interface {
 	List(ctx context.Context, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
 	ListMyOrganized(ctx context.Context, user WithUser, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
 	ListMyAttendees(ctx context.Context, user WithUser, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
-	ListByOwner(ctx context.Context, ownerUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
+	ListByBusiness(ctx context.Context, businessUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
 	ListByPost(ctx context.Context, postUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
 	ListByUser(ctx context.Context, userName string, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
 	GetDetailWithUser(ctx context.Context, uuid string, userUUID string, userName string) (*Entity, *bool, *i18np.Error)
@@ -108,11 +108,11 @@ func (r *repo) Validated(ctx context.Context, v *Validated) *i18np.Error {
 	}
 	update := bson.M{
 		"$set": bson.M{
-			fields.OwnerUUID:  v.OwnerUUID,
-			fields.Days:       v.Days,
-			fields.TotalPrice: v.TotalPrice,
-			fields.State:      Pending,
-			fields.UpdatedAt:  time.Now(),
+			fields.BusinessUUID: v.BusinessUUID,
+			fields.Days:         v.Days,
+			fields.TotalPrice:   v.TotalPrice,
+			fields.State:        Pending,
+			fields.UpdatedAt:    time.Now(),
 		},
 	}
 	return r.helper.UpdateOne(ctx, filter, update)
@@ -386,9 +386,9 @@ func (r *repo) ListMyAttendees(ctx context.Context, user WithUser, listConf list
 	}, nil
 }
 
-func (r *repo) ListByOwner(ctx context.Context, ownerUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error) {
+func (r *repo) ListByBusiness(ctx context.Context, businessUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error) {
 	filter := bson.M{
-		fields.OwnerUUID: ownerUUID,
+		fields.BusinessUUID: businessUUID,
 	}
 	l, err := r.helper.GetListFilter(ctx, filter, r.listOptions(listConf))
 	if err != nil {

@@ -18,7 +18,7 @@ type BookingListByPostQuery struct {
 }
 
 type BookingListByPostRes struct {
-	List *list.Result[booking.BookingOwnerListDto]
+	List *list.Result[booking.BookingBusinessListDto]
 }
 
 type BookingListByPostHandler cqrs.HandlerFunc[BookingListByPostQuery, *BookingListByPostRes]
@@ -49,12 +49,12 @@ func NewBookingListByPostHandler(repo booking.Repo, cacheSrv cache.Service) Book
 		if err != nil {
 			return nil, err
 		}
-		li := make([]booking.BookingOwnerListDto, len(res.List))
+		li := make([]booking.BookingBusinessListDto, len(res.List))
 		for i, v := range res.List {
-			li[i] = v.ToOwnerListDto()
+			li[i] = v.ToBusinessListDto()
 		}
 		return &BookingListByPostRes{
-			List: &list.Result[booking.BookingOwnerListDto]{
+			List: &list.Result[booking.BookingBusinessListDto]{
 				List:          li,
 				Total:         res.Total,
 				FilteredTotal: res.FilteredTotal,

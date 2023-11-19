@@ -84,7 +84,7 @@ func (h srv) Listen() error {
 			admin.Get("/:uuid", h.adminRoute(config.Roles.Booking.View), h.rateLimit(), h.wrapWithTimeout(h.BookingAdminView))
 
 			router.Get("/:uuid/check-availability", h.rateLimit(), h.wrapWithTimeout(h.BookingCheckAvailability))
-			router.Get("/by-owner/:uuid", h.rateLimit(), h.wrapWithTimeout(h.BookingListByOwner))
+			router.Get("/by-business/:uuid", h.rateLimit(), h.wrapWithTimeout(h.BookingListByBusiness))
 			router.Get("/by-post/:uuid", h.rateLimit(), h.wrapWithTimeout(h.BookingListByPost))
 			router.Get("/by-user/:username", h.rateLimit(), h.wrapWithTimeout(h.BookingListByUser))
 
