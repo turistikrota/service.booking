@@ -16,7 +16,7 @@ type BookingListDto struct {
 
 type BookingViewDto struct {
 	UUID         string    `json:"uuid"`
-	PostUUID     string    `json:"postUUID"`
+	ListingUUID  string    `json:"listingUUID"`
 	BusinessUUID string    `json:"businessUUID"`
 	People       People    `json:"people"`
 	Guests       []Guest   `json:"guests"`
@@ -32,7 +32,7 @@ type BookingViewDto struct {
 
 type BookingAdminViewDto struct {
 	UUID         string    `json:"uuid"`
-	PostUUID     string    `json:"postUUID"`
+	ListingUUID  string    `json:"listingUUID"`
 	BusinessUUID string    `json:"businessUUID"`
 	User         User      `json:"user"`
 	People       People    `json:"people"`
@@ -62,7 +62,7 @@ type BookingAdminListDto struct {
 
 type BookingBusinessViewDto struct {
 	UUID         string    `json:"uuid"`
-	PostUUID     string    `json:"postUUID"`
+	ListingUUID  string    `json:"listingUUID"`
 	BusinessUUID string    `json:"businessUUID"`
 	People       People    `json:"people"`
 	Guests       []Guest   `json:"guests"`
@@ -118,7 +118,7 @@ func (e *Entity) ToBusinessListDto() BookingBusinessListDto {
 func (e *Entity) ToViewDto() BookingViewDto {
 	return BookingViewDto{
 		UUID:         e.UUID,
-		PostUUID:     e.PostUUID,
+		ListingUUID:  e.ListingUUID,
 		BusinessUUID: e.BusinessUUID,
 		People:       e.People,
 		Guests:       e.Guests,
@@ -136,7 +136,7 @@ func (e *Entity) ToViewDto() BookingViewDto {
 func (e *Entity) ToAdminViewDto() BookingAdminViewDto {
 	return BookingAdminViewDto{
 		UUID:         e.UUID,
-		PostUUID:     e.PostUUID,
+		ListingUUID:  e.ListingUUID,
 		BusinessUUID: e.BusinessUUID,
 		People:       e.People,
 		User:         e.User,

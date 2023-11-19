@@ -62,7 +62,7 @@ func NewApplication(cnf Config) app.Application {
 			BookingAdminView:         query.NewBookingAdminViewHandler(bookingRepo),
 			BookingCheckAvailability: query.NewBookingCheckAvailabilityHandler(bookingRepo),
 			BookingListByBusiness:    query.NewBookingListByBusinessHandler(bookingRepo, cnf.CacheSrv),
-			BookingListByPost:        query.NewBookingListByPostHandler(bookingRepo, cnf.CacheSrv),
+			BookingListByListing:     query.NewBookingListByListingHandler(bookingRepo, cnf.CacheSrv),
 			BookingListByUser:        query.NewBookingListByUserHandler(bookingRepo, cnf.CacheSrv),
 			BookingListMyAttendees:   query.NewBookingListMyAttendeesHandler(bookingRepo),
 			BookingListMyOrganized:   query.NewBookingListMyOrganizedHandler(bookingRepo),

@@ -2,7 +2,7 @@ package booking
 
 type fieldsType struct {
 	UUID         string
-	PostUUID     string
+	ListingUUID  string
 	BusinessUUID string
 	People       string
 	User         string
@@ -41,7 +41,7 @@ type dayFieldsType struct {
 
 var fields = fieldsType{
 	UUID:         "_id",
-	PostUUID:     "post_uuid",
+	ListingUUID:  "listing_uuid",
 	BusinessUUID: "business_uuid",
 	People:       "people",
 	User:         "user",

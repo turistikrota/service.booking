@@ -4,7 +4,7 @@ import "time"
 
 type Entity struct {
 	UUID         string    `json:"uuid" bson:"_id,omitempty"`
-	PostUUID     string    `json:"postUUID" bson:"post_uuid"`
+	ListingUUID  string    `json:"listingUUID" bson:"listing_uuid"`
 	BusinessUUID string    `json:"businessUUID" bson:"business_uuid"`
 	People       People    `json:"people" bson:"people"`
 	User         User      `json:"user" bson:"user"`

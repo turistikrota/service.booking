@@ -16,7 +16,7 @@ type Events interface {
 type (
 	CreatedEvent struct {
 		BookingUUID string    `json:"booking_uuid"`
-		PostUUID    string    `json:"post_uuid"`
+		ListingUUID string    `json:"listing_uuid"`
 		People      *People   `json:"people"`
 		StartDate   time.Time `json:"start_date"`
 		EndDate     time.Time `json:"end_date"`

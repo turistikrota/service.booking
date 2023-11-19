@@ -10,12 +10,12 @@ import (
 )
 
 type BookingCreateCmd struct {
-	PostUUID  string          `json:"-"`
-	User      booking.User    `json:"-"`
-	People    *booking.People `json:"people" validate:"required"`
-	StartDate string          `json:"startDate" validate:"required,datetime=2006-01-02"`
-	EndDate   string          `json:"endDate" validate:"required,datetime=2006-01-02"`
-	IsPublic  *bool           `json:"isPublic" validate:"required"`
+	ListingUUID string          `json:"-"`
+	User        booking.User    `json:"-"`
+	People      *booking.People `json:"people" validate:"required"`
+	StartDate   string          `json:"startDate" validate:"required,datetime=2006-01-02"`
+	EndDate     string          `json:"endDate" validate:"required,datetime=2006-01-02"`
+	IsPublic    *bool           `json:"isPublic" validate:"required"`
 }
 
 type BookingCreateRes struct {
@@ -28,7 +28,7 @@ func NewBookingCreateHandler(factory booking.Factory, repo booking.Repo, events 
 	return func(ctx context.Context, cmd BookingCreateCmd) (*BookingCreateRes, *i18np.Error) {
 		startDate, _ := time.Parse("2006-01-02", cmd.StartDate)
 		endDate, _ := time.Parse("2006-01-02", cmd.EndDate)
-		available, err := repo.CheckAvailability(ctx, cmd.PostUUID, startDate, endDate)
+		available, err := repo.CheckAvailability(ctx, cmd.ListingUUID, startDate, endDate)
 		if err != nil {
 			return nil, err
 		}
@@ -36,13 +36,13 @@ func NewBookingCreateHandler(factory booking.Factory, repo booking.Repo, events 
 			return nil, factory.Errors.NotAvailable()
 		}
 		e := factory.New(booking.NewConfig{
-			PostUUID:  cmd.PostUUID,
-			People:    *cmd.People,
-			User:      cmd.User,
-			State:     booking.Created,
-			StartDate: startDate,
-			EndDate:   endDate,
-			IsPublic:  cmd.IsPublic,
+			ListingUUID: cmd.ListingUUID,
+			People:      *cmd.People,
+			User:        cmd.User,
+			State:       booking.Created,
+			StartDate:   startDate,
+			EndDate:     endDate,
+			IsPublic:    cmd.IsPublic,
 		})
 		error := factory.Validate(e)
 		if error != nil {
@@ -54,7 +54,7 @@ func NewBookingCreateHandler(factory booking.Factory, repo booking.Repo, events 
 		}
 		events.Created(booking.CreatedEvent{
 			BookingUUID: res.UUID,
-			PostUUID:    res.PostUUID,
+			ListingUUID: res.ListingUUID,
 			People:      &res.People,
 			StartDate:   res.StartDate,
 			EndDate:     res.EndDate,

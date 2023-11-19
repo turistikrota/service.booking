@@ -13,10 +13,10 @@ import (
 )
 
 func (h srv) BookingCreate(ctx *fiber.Ctx) error {
-	detail := command.PostDetailCmd{}
+	detail := command.ListingDetailCmd{}
 	h.parseParams(ctx, &detail)
 	cmd := command.BookingCreateCmd{}
-	cmd.PostUUID = detail.PostUUID
+	cmd.ListingUUID = detail.ListingUUID
 	cmd.User = booking.User{
 		UUID: current_user.Parse(ctx).UUID,
 		Name: current_account.Parse(ctx).Name,
@@ -194,7 +194,7 @@ func (h srv) BookingCheckAvailability(ctx *fiber.Ctx) error {
 	h.parseParams(ctx, &detail)
 	query := query.BookingCheckAvailabilityQuery{}
 	h.parseQuery(ctx, &query)
-	query.PostUUID = detail.UUID
+	query.ListingUUID = detail.UUID
 	res, err := h.app.Queries.BookingCheckAvailability(ctx.UserContext(), query)
 	if err != nil {
 		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
@@ -219,15 +219,15 @@ func (h srv) BookingListByBusiness(ctx *fiber.Ctx) error {
 	return result.SuccessDetail(Messages.Success.Ok, res.List)
 }
 
-func (h srv) BookingListByPost(ctx *fiber.Ctx) error {
+func (h srv) BookingListByListing(ctx *fiber.Ctx) error {
 	detail := command.BookingDetailCmd{}
 	h.parseParams(ctx, &detail)
 	p := utils.Pagination{}
 	h.parseQuery(ctx, &p)
-	query := query.BookingListByPostQuery{}
+	query := query.BookingListByListingQuery{}
 	query.Pagination = &p
-	query.PostUUID = detail.UUID
-	res, err := h.app.Queries.BookingListByPost(ctx.UserContext(), query)
+	query.ListingUUID = detail.UUID
+	res, err := h.app.Queries.BookingListByListing(ctx.UserContext(), query)
 	if err != nil {
 		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
 		return result.ErrorDetail(h.i18n.TranslateFromError(*err, l, a), res)

@@ -20,7 +20,7 @@ type WithUser struct {
 
 type Validated struct {
 	UUID         string
-	PostUUID     string
+	ListingUUID  string
 	BusinessUUID string
 	BusinessName string
 	TotalPrice   float64
@@ -48,10 +48,10 @@ type Repo interface {
 	ListMyOrganized(ctx context.Context, user WithUser, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
 	ListMyAttendees(ctx context.Context, user WithUser, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
 	ListByBusiness(ctx context.Context, businessUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
-	ListByPost(ctx context.Context, postUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
+	ListByListing(ctx context.Context, listingUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
 	ListByUser(ctx context.Context, userName string, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
 	GetDetailWithUser(ctx context.Context, uuid string, userUUID string, userName string) (*Entity, *bool, *i18np.Error)
-	CheckAvailability(ctx context.Context, postUUID string, startDate time.Time, endDate time.Time) (bool, *i18np.Error)
+	CheckAvailability(ctx context.Context, listingUUID string, startDate time.Time, endDate time.Time) (bool, *i18np.Error)
 }
 
 type repo struct {
@@ -408,9 +408,9 @@ func (r *repo) ListByBusiness(ctx context.Context, businessUUID string, listConf
 	}, nil
 }
 
-func (r *repo) ListByPost(ctx context.Context, postUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error) {
+func (r *repo) ListByListing(ctx context.Context, listingUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error) {
 	filter := bson.M{
-		fields.PostUUID: postUUID,
+		fields.ListingUUID: listingUUID,
 	}
 	l, err := r.helper.GetListFilter(ctx, filter, r.listOptions(listConf))
 	if err != nil {
@@ -524,9 +524,9 @@ func (r *repo) View(ctx context.Context, uuid string, userName string) (*Entity,
 	return *res, nil
 }
 
-func (r *repo) CheckAvailability(ctx context.Context, postUUID string, startDate time.Time, endDate time.Time) (bool, *i18np.Error) {
+func (r *repo) CheckAvailability(ctx context.Context, listingUUID string, startDate time.Time, endDate time.Time) (bool, *i18np.Error) {
 	filter := bson.M{
-		fields.PostUUID: postUUID,
+		fields.ListingUUID: listingUUID,
 		fields.State: bson.M{
 			"$in": []State{
 				Created,

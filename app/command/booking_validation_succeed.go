@@ -6,16 +6,16 @@ import (
 	"github.com/cilloparch/cillop/cqrs"
 	"github.com/cilloparch/cillop/i18np"
 	"github.com/turistikrota/service.booking/domains/booking"
-	"github.com/turistikrota/service.booking/domains/post"
+	"github.com/turistikrota/service.booking/domains/listing"
 )
 
 type BookingValidationSucceedCmd struct {
-	BookingUUID  string             `json:"booking_uuid"`
-	PostUUID     string             `json:"post_uuid"`
-	BusinessUUID string             `json:"business_uuid"`
-	BusinessName string             `json:"business_name"`
-	TotalPrice   float64            `json:"total_price"`
-	PricePerDays []post.PricePerDay `json:"price_per_days"`
+	BookingUUID  string                `json:"booking_uuid"`
+	ListingUUID  string                `json:"listing_uuid"`
+	BusinessUUID string                `json:"business_uuid"`
+	BusinessName string                `json:"business_name"`
+	TotalPrice   float64               `json:"total_price"`
+	PricePerDays []listing.PricePerDay `json:"price_per_days"`
 }
 
 type BookingValidationSucceedRes struct{}
@@ -33,7 +33,7 @@ func NewBookingValidationSucceedHandler(repo booking.Repo, events booking.Events
 		}
 		_err := repo.Validated(ctx, &booking.Validated{
 			UUID:         cmd.BookingUUID,
-			PostUUID:     cmd.PostUUID,
+			ListingUUID:  cmd.ListingUUID,
 			BusinessUUID: cmd.BusinessUUID,
 			BusinessName: cmd.BusinessName,
 			TotalPrice:   cmd.TotalPrice,
