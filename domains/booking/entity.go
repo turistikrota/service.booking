@@ -12,6 +12,7 @@ type Entity struct {
 	Days         []Day     `json:"days" bson:"days"`
 	State        State     `json:"state" bson:"state"`
 	IsPublic     *bool     `json:"isPublic" bson:"is_public"`
+	Price        float64   `json:"price" bson:"price"`
 	TotalPrice   float64   `json:"totalPrice" bson:"total_price"`
 	StartDate    time.Time `json:"startDate" bson:"start_date"`
 	EndDate      time.Time `json:"endDate" bson:"end_date"`

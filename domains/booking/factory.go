@@ -82,8 +82,5 @@ func (f Factory) IsCancelable(e *Entity) bool {
 		}
 	}
 	now := time.Now()
-	if e.StartDate.Before(now) {
-		return false
-	}
-	return true
+	return e.StartDate.After(now) && e.EndDate.After(now)
 }

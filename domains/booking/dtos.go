@@ -8,7 +8,8 @@ type BookingListDto struct {
 	Guests     []Guest   `json:"guests"`
 	State      State     `json:"state"`
 	IsPublic   *bool     `json:"isPublic"`
-	TotalPrice float64   `json:"totalPrice"`
+	Price      float64   `json:"price"`
+	TotalPrice float64   `json:"totalPrice,omitempty"`
 	StartDate  time.Time `json:"startDate"`
 	EndDate    time.Time `json:"endDate"`
 	CreatedAt  time.Time `json:"createdAt"`
@@ -23,7 +24,8 @@ type BookingViewDto struct {
 	Days         []Day     `json:"days"`
 	State        State     `json:"state"`
 	IsPublic     *bool     `json:"isPublic"`
-	TotalPrice   float64   `json:"totalPrice"`
+	Price        float64   `json:"price"`
+	TotalPrice   float64   `json:"totalPrice,omitempty"`
 	StartDate    time.Time `json:"startDate"`
 	EndDate      time.Time `json:"endDate"`
 	CreatedAt    time.Time `json:"createdAt"`
@@ -40,7 +42,8 @@ type BookingAdminViewDto struct {
 	Days         []Day     `json:"days"`
 	State        State     `json:"state"`
 	IsPublic     *bool     `json:"isPublic"`
-	TotalPrice   float64   `json:"totalPrice"`
+	Price        float64   `json:"price"`
+	TotalPrice   float64   `json:"totalPrice,omitempty"`
 	StartDate    time.Time `json:"startDate"`
 	EndDate      time.Time `json:"endDate"`
 	CreatedAt    time.Time `json:"createdAt"`
@@ -54,7 +57,8 @@ type BookingAdminListDto struct {
 	Guests     []Guest   `json:"guests"`
 	State      State     `json:"state"`
 	IsPublic   *bool     `json:"isPublic"`
-	TotalPrice float64   `json:"totalPrice"`
+	Price      float64   `json:"price"`
+	TotalPrice float64   `json:"totalPrice,omitempty"`
 	StartDate  time.Time `json:"startDate"`
 	EndDate    time.Time `json:"endDate"`
 	CreatedAt  time.Time `json:"createdAt"`
@@ -69,7 +73,8 @@ type BookingBusinessViewDto struct {
 	Days         []Day     `json:"days"`
 	State        State     `json:"state"`
 	IsPublic     *bool     `json:"isPublic"`
-	TotalPrice   float64   `json:"totalPrice"`
+	Price        float64   `json:"price"`
+	TotalPrice   float64   `json:"totalPrice,omitempty"`
 	StartDate    time.Time `json:"startDate"`
 	EndDate      time.Time `json:"endDate"`
 	CreatedAt    time.Time `json:"createdAt"`
@@ -82,7 +87,8 @@ type BookingBusinessListDto struct {
 	Guests     []Guest   `json:"guests"`
 	State      State     `json:"state"`
 	IsPublic   *bool     `json:"isPublic"`
-	TotalPrice float64   `json:"totalPrice"`
+	Price      float64   `json:"price"`
+	TotalPrice float64   `json:"totalPrice,omitempty"`
 	StartDate  time.Time `json:"startDate"`
 	EndDate    time.Time `json:"endDate"`
 	CreatedAt  time.Time `json:"createdAt"`
@@ -95,6 +101,7 @@ func (e *Entity) ToListDto() BookingListDto {
 		Guests:     e.Guests,
 		State:      e.State,
 		IsPublic:   e.IsPublic,
+		Price:      e.Price,
 		TotalPrice: e.TotalPrice,
 		StartDate:  e.StartDate,
 		EndDate:    e.EndDate,
@@ -108,6 +115,7 @@ func (e *Entity) ToBusinessListDto() BookingBusinessListDto {
 		Guests:     e.Guests,
 		State:      e.State,
 		IsPublic:   e.IsPublic,
+		Price:      e.Price,
 		TotalPrice: e.TotalPrice,
 		StartDate:  e.StartDate,
 		EndDate:    e.EndDate,
@@ -125,6 +133,7 @@ func (e *Entity) ToViewDto() BookingViewDto {
 		State:        e.State,
 		IsPublic:     e.IsPublic,
 		Days:         e.Days,
+		Price:        e.Price,
 		TotalPrice:   e.TotalPrice,
 		StartDate:    e.StartDate,
 		EndDate:      e.EndDate,
@@ -144,6 +153,7 @@ func (e *Entity) ToAdminViewDto() BookingAdminViewDto {
 		State:        e.State,
 		IsPublic:     e.IsPublic,
 		Days:         e.Days,
+		Price:        e.Price,
 		TotalPrice:   e.TotalPrice,
 		StartDate:    e.StartDate,
 		EndDate:      e.EndDate,
@@ -159,6 +169,7 @@ func (e *Entity) ToAdminListDto() BookingAdminListDto {
 		Guests:     e.Guests,
 		State:      e.State,
 		IsPublic:   e.IsPublic,
+		Price:      e.Price,
 		TotalPrice: e.TotalPrice,
 		StartDate:  e.StartDate,
 		EndDate:    e.EndDate,

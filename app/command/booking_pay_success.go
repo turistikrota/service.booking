@@ -9,7 +9,8 @@ import (
 )
 
 type BookingPaySuccessCmd struct {
-	BookingUUID string `json:"bookingUUID"`
+	BookingUUID string  `json:"bookingUUID"`
+	TotalPrice  float64 `json:"totalPrice"`
 }
 
 type BookingPaySuccessRes struct{}
@@ -18,7 +19,7 @@ type BookingPaySuccessHandler cqrs.HandlerFunc[BookingPaySuccessCmd, *BookingPay
 
 func NewBookingPaySuccessHandler(repo booking.Repo) BookingPaySuccessHandler {
 	return func(ctx context.Context, cmd BookingPaySuccessCmd) (*BookingPaySuccessRes, *i18np.Error) {
-		err := repo.MarkPaid(ctx, cmd.BookingUUID)
+		err := repo.MarkPaid(ctx, cmd.BookingUUID, cmd.TotalPrice)
 		if err != nil {
 			return nil, err
 		}

@@ -33,7 +33,7 @@ type Repo interface {
 	Validated(ctx context.Context, v *Validated) *i18np.Error
 	MarkPending(ctx context.Context, uuid string) *i18np.Error
 	MarkExpired(ctx context.Context, uuid string) *i18np.Error
-	MarkPaid(ctx context.Context, uuid string) *i18np.Error
+	MarkPaid(ctx context.Context, uuid string, totalPrice float64) *i18np.Error
 	MarkRefunded(ctx context.Context, uuid string) *i18np.Error
 	MarkPayCancelled(ctx context.Context, uuid string) *i18np.Error
 	MarkNotValid(ctx context.Context, uuid string) *i18np.Error
@@ -111,7 +111,7 @@ func (r *repo) Validated(ctx context.Context, v *Validated) *i18np.Error {
 		"$set": bson.M{
 			fields.BusinessUUID: v.BusinessUUID,
 			fields.Days:         v.Days,
-			fields.TotalPrice:   v.TotalPrice,
+			fields.Price:        v.TotalPrice,
 			fields.State:        PayPending,
 			fields.UpdatedAt:    time.Now(),
 		},
@@ -170,7 +170,7 @@ func (r *repo) MarkPending(ctx context.Context, uuid string) *i18np.Error {
 	return r.helper.UpdateOne(ctx, filter, update)
 }
 
-func (r *repo) MarkPaid(ctx context.Context, uuid string) *i18np.Error {
+func (r *repo) MarkPaid(ctx context.Context, uuid string, totalPrice float64) *i18np.Error {
 	id, err := mongo2.TransformId(uuid)
 	if err != nil {
 		return r.factory.Errors.InvalidUUID()
@@ -180,8 +180,9 @@ func (r *repo) MarkPaid(ctx context.Context, uuid string) *i18np.Error {
 	}
 	update := bson.M{
 		"$set": bson.M{
-			fields.State:     PayPaid,
-			fields.UpdatedAt: time.Now(),
+			fields.TotalPrice: totalPrice,
+			fields.State:      PayPaid,
+			fields.UpdatedAt:  time.Now(),
 		},
 	}
 	return r.helper.UpdateOne(ctx, filter, update)

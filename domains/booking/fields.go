@@ -10,6 +10,7 @@ type fieldsType struct {
 	Days         string
 	State        string
 	IsPublic     string
+	Price        string
 	TotalPrice   string
 	StartDate    string
 	EndDate      string
@@ -49,6 +50,7 @@ var fields = fieldsType{
 	Days:         "days",
 	State:        "state",
 	IsPublic:     "is_public",
+	Price:        "price",
 	TotalPrice:   "total_price",
 	StartDate:    "start_date",
 	EndDate:      "end_date",
