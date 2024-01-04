@@ -198,7 +198,7 @@ func (h srv) BookingCheckAvailability(ctx *fiber.Ctx) error {
 	res, err := h.app.Queries.BookingCheckAvailability(ctx.UserContext(), query)
 	if err != nil {
 		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
-		return result.ErrorDetail(h.i18n.TranslateFromError(*err, l, a), res)
+		return result.Error(h.i18n.TranslateFromError(*err, l, a))
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res.IsAvailable)
 }
