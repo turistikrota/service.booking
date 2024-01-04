@@ -65,6 +65,14 @@ func (f Factory) validateTime(e *Entity) *i18np.Error {
 	return f.ValidateDateTime(e.StartDate, e.EndDate)
 }
 
+func (f Factory) ParseDatesWithoutHours(startDate time.Time, endDate time.Time) (time.Time, time.Time) {
+	return f.parseDateWithoutHours(startDate), f.parseDateWithoutHours(endDate)
+}
+
+func (f Factory) parseDateWithoutHours(date time.Time) time.Time {
+	return time.Date(date.Year(), date.Month(), date.Day(), 0, 0, 0, 0, time.UTC)
+}
+
 func (f Factory) ValidateDateTime(startDate time.Time, endDate time.Time) *i18np.Error {
 	if startDate.After(endDate) {
 		return f.Errors.StartDateAfterEndDate()
