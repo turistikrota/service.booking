@@ -62,10 +62,14 @@ func (f Factory) Validate(e *Entity) *i18np.Error {
 }
 
 func (f Factory) validateTime(e *Entity) *i18np.Error {
-	if e.StartDate.After(e.EndDate) {
+	return f.ValidateDateTime(e.StartDate, e.EndDate)
+}
+
+func (f Factory) ValidateDateTime(startDate time.Time, endDate time.Time) *i18np.Error {
+	if startDate.After(endDate) {
 		return f.Errors.StartDateAfterEndDate()
 	}
-	if e.StartDate.Before(time.Now()) {
+	if startDate.Before(time.Now()) {
 		return f.Errors.StartDateBeforeNow()
 	}
 	return nil
