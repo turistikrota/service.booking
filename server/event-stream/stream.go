@@ -41,5 +41,9 @@ func (s srv) Listen() error {
 		return err
 	}
 	err = s.engine.Subscribe(s.topics.Booking.PayTimeout, s.OnBookingPayTimeout)
+	if err != nil {
+		return err
+	}
+	err = s.engine.Subscribe(s.topics.Booking.PayCancelled, s.OnBookingPayCancelled)
 	return err
 }

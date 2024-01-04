@@ -45,6 +45,7 @@ func NewApplication(cnf Config) app.Application {
 			BookingCancel:            command.NewBookingCancelHandler(bookingFactory, bookingRepo, bookingEvents),
 			BookingMarkPrivate:       command.NewBookingMarkPrivateHandler(bookingFactory, bookingRepo),
 			BookingPayTimeout:        command.NewBookingPayTimeoutHandler(bookingRepo),
+			BookingPayCancelled:      command.NewBookingPayCancelledHandler(bookingRepo),
 			BookingPaySuccess:        command.NewBookingPaySuccessHandler(bookingRepo),
 			BookingMarkPublic:        command.NewBookingMarkPublicHandler(bookingFactory, bookingRepo),
 			BookingRemoveGuest:       command.NewBookingRemoveGuestHandler(bookingFactory, bookingRepo, bookingEvents),

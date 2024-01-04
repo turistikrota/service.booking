@@ -52,3 +52,14 @@ func (s srv) OnBookingPayTimeout(data []byte) {
 	}
 	_, _ = s.app.Commands.BookingPayTimeout(context.Background(), cmd)
 }
+
+func (s srv) OnBookingPayCancelled(data []byte) {
+	fmt.Println("OnBookingPayCancelled")
+	cmd := command.BookingPayCancelledCmd{}
+	err := json.Unmarshal(data, &cmd)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	_, _ = s.app.Commands.BookingPayCancelled(context.Background(), cmd)
+}

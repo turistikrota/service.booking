@@ -15,6 +15,7 @@ type Commands struct {
 	BookingCancel            command.BookingCancelHandler
 	BookingMarkPrivate       command.BookingMarkPrivateHandler
 	BookingPayTimeout        command.BookingPayTimeoutHandler
+	BookingPayCancelled      command.BookingPayCancelledHandler
 	BookingPaySuccess        command.BookingPaySuccessHandler
 	BookingMarkPublic        command.BookingMarkPublicHandler
 	BookingRemoveGuest       command.BookingRemoveGuestHandler
