@@ -24,6 +24,10 @@ type BookingValidationSucceedHandler cqrs.HandlerFunc[BookingValidationSucceedCm
 
 func NewBookingValidationSucceedHandler(repo booking.Repo, events booking.Events) BookingValidationSucceedHandler {
 	return func(ctx context.Context, cmd BookingValidationSucceedCmd) (*BookingValidationSucceedRes, *i18np.Error) {
+		book, err := repo.GetByUUID(ctx, cmd.BookingUUID)
+		if err != nil {
+			return nil, err
+		}
 		days := make([]booking.Day, len(cmd.PricePerDays))
 		for i, pricePerDay := range cmd.PricePerDays {
 			days[i] = booking.Day{
@@ -43,7 +47,11 @@ func NewBookingValidationSucceedHandler(repo booking.Repo, events booking.Events
 			return nil, _err
 		}
 		events.PayPending(booking.PayPendingEvent{
-			BookingUUID: cmd.BookingUUID,
+			BookingUUID:  cmd.BookingUUID,
+			BusinessUUID: cmd.BusinessUUID,
+			ListingUUID:  cmd.ListingUUID,
+			Price:        cmd.TotalPrice,
+			User:         &book.User,
 		})
 		return &BookingValidationSucceedRes{}, nil
 	}

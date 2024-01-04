@@ -22,7 +22,11 @@ type (
 		EndDate     time.Time `json:"end_date"`
 	}
 	PayPendingEvent struct {
-		BookingUUID string `json:"booking_uuid"`
+		BookingUUID  string  `json:"booking_uuid"`
+		BusinessUUID string  `json:"business_uuid"`
+		ListingUUID  string  `json:"listing_uuid"`
+		User         *User   `json:"user"`
+		Price        float64 `json:"price"`
 	}
 	CancelledEvent struct {
 		BookingUUID string `json:"booking_uuid"`
