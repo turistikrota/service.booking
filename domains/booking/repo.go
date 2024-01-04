@@ -554,7 +554,7 @@ func (r *repo) CheckAvailability(ctx context.Context, listingUUID string, startD
 			},
 		},
 		fields.StartDate: bson.M{
-			"$lte": endDate,
+			"$lt": endDate,
 		},
 		fields.EndDate: bson.M{
 			"$gte": startDate,
