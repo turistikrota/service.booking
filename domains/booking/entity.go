@@ -44,13 +44,14 @@ type People struct {
 type State string
 
 const (
-	Canceled State = "canceled"
-	NotValid State = "not_valid"
-	Created  State = "created"
-	Expired  State = "expired"
-	Pending  State = "pending"
-	Paid     State = "paid"
-	Refunded State = "refunded"
+	Canceled     State = "canceled"
+	NotValid     State = "not_valid"
+	Created      State = "created"
+	PayExpired   State = "pay_expired"
+	PayCancelled State = "pay_cancelled"
+	PayPending   State = "pay_pending"
+	PayPaid      State = "pay_paid"
+	PayRefunded  State = "pay_refunded"
 )
 
 func (s State) String() string {

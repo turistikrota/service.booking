@@ -35,6 +35,7 @@ type Repo interface {
 	MarkExpired(ctx context.Context, uuid string) *i18np.Error
 	MarkPaid(ctx context.Context, uuid string) *i18np.Error
 	MarkRefunded(ctx context.Context, uuid string) *i18np.Error
+	MarkPayCancelled(ctx context.Context, uuid string) *i18np.Error
 	MarkNotValid(ctx context.Context, uuid string) *i18np.Error
 	MarkPublic(ctx context.Context, uuid string) *i18np.Error
 	MarkPrivate(ctx context.Context, uuid string) *i18np.Error
@@ -111,7 +112,7 @@ func (r *repo) Validated(ctx context.Context, v *Validated) *i18np.Error {
 			fields.BusinessUUID: v.BusinessUUID,
 			fields.Days:         v.Days,
 			fields.TotalPrice:   v.TotalPrice,
-			fields.State:        Pending,
+			fields.State:        PayPending,
 			fields.UpdatedAt:    time.Now(),
 		},
 	}
@@ -128,7 +129,24 @@ func (r *repo) MarkExpired(ctx context.Context, uuid string) *i18np.Error {
 	}
 	update := bson.M{
 		"$set": bson.M{
-			fields.State:     Expired,
+			fields.State:     PayExpired,
+			fields.UpdatedAt: time.Now(),
+		},
+	}
+	return r.helper.UpdateOne(ctx, filter, update)
+}
+
+func (r *repo) MarkPayCancelled(ctx context.Context, uuid string) *i18np.Error {
+	id, err := mongo2.TransformId(uuid)
+	if err != nil {
+		return r.factory.Errors.InvalidUUID()
+	}
+	filter := bson.M{
+		fields.UUID: id,
+	}
+	update := bson.M{
+		"$set": bson.M{
+			fields.State:     PayCancelled,
 			fields.UpdatedAt: time.Now(),
 		},
 	}
@@ -145,7 +163,7 @@ func (r *repo) MarkPending(ctx context.Context, uuid string) *i18np.Error {
 	}
 	update := bson.M{
 		"$set": bson.M{
-			fields.State:     Pending,
+			fields.State:     PayPending,
 			fields.UpdatedAt: time.Now(),
 		},
 	}
@@ -162,7 +180,7 @@ func (r *repo) MarkPaid(ctx context.Context, uuid string) *i18np.Error {
 	}
 	update := bson.M{
 		"$set": bson.M{
-			fields.State:     Paid,
+			fields.State:     PayPaid,
 			fields.UpdatedAt: time.Now(),
 		},
 	}
@@ -179,7 +197,7 @@ func (r *repo) MarkRefunded(ctx context.Context, uuid string) *i18np.Error {
 	}
 	update := bson.M{
 		"$set": bson.M{
-			fields.State:     Refunded,
+			fields.State:     PayRefunded,
 			fields.UpdatedAt: time.Now(),
 		},
 	}
@@ -530,8 +548,8 @@ func (r *repo) CheckAvailability(ctx context.Context, listingUUID string, startD
 		fields.State: bson.M{
 			"$in": []State{
 				Created,
-				Pending,
-				Paid,
+				PayPending,
+				PayPaid,
 			},
 		},
 		fields.StartDate: bson.M{

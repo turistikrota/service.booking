@@ -74,7 +74,7 @@ func (f Factory) validateTime(e *Entity) *i18np.Error {
 func (f Factory) IsCancelable(e *Entity) bool {
 	disallowStatus := []State{
 		Canceled,
-		Refunded,
+		PayRefunded,
 	}
 	for _, s := range disallowStatus {
 		if e.State == s {
