@@ -556,9 +556,18 @@ func (r *repo) CheckAvailability(ctx context.Context, listingUUID string, startD
 		fields.StartDate: bson.M{
 			"$lte": endDate,
 		},
-		fields.EndDate: bson.M{
-			"$gt": startDate,
-			"$lt": endDate,
+		"$or": []bson.M{
+			{
+				fields.EndDate: bson.M{
+					"$gt": startDate,
+				},
+			},
+			{
+				fields.StartDate: startDate,
+				fields.EndDate: bson.M{
+					"$gte": endDate,
+				},
+			},
 		},
 	}
 	count, err := r.collection.CountDocuments(ctx, filter)
