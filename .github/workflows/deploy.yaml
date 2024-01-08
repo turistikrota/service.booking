@@ -50,4 +50,5 @@ jobs:
           script: |
             docker service ls | grep -q service-booking && docker service rm service-booking || true
             cd $DIR
+            docker pull turistikrota/service.booking:$IMAGE_TAG
             docker service create --name service-booking --network $NETWORK_NAME --secret $SECRET_NAME_1 --secret $SECRET_NAME_2 --env-file .env --host $HOST_ALIAS:$HOST_IP --host $REDIS_HOST_ALIAS:$HOST_IP --publish $APP_PORT:$APP_PORT turistikrota/service.booking:$IMAGE_TAG 
