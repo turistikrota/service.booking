@@ -22,9 +22,10 @@ func (h srv) BookingCreate(ctx *fiber.Ctx) error {
 		Name: current_account.Parse(ctx).Name,
 	}
 	h.parseBody(ctx, &cmd)
+	l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+	cmd.Locale = l
 	res, err := h.app.Commands.BookingCreate(ctx.UserContext(), cmd)
 	if err != nil {
-		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
 		return result.Error(h.i18n.TranslateFromError(*err, l, a))
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res)

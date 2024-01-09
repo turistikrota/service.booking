@@ -25,6 +25,7 @@ type NewConfig struct {
 	People      People
 	User        User
 	State       State
+	Listing     Listing
 	StartDate   time.Time
 	EndDate     time.Time
 	IsPublic    *bool
@@ -36,6 +37,7 @@ func (f Factory) New(cnf NewConfig) *Entity {
 		ListingUUID: cnf.ListingUUID,
 		People:      cnf.People,
 		User:        cnf.User,
+		Listing:     cnf.Listing,
 		Guests:      []Guest{},
 		Days:        []Day{},
 		State:       cnf.State,
