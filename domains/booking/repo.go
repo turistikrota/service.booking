@@ -534,6 +534,5 @@ func (r *repo) CheckAvailability(ctx context.Context, listingUUID string, startD
 
 func (r *repo) listOptions(listConfig list.Config) *options.FindOptions {
 	opts := options.Find()
-	opts.SetLimit(listConfig.Limit).SetSkip(listConfig.Offset)
-	return opts
+	return opts.SetLimit(listConfig.Limit).SetSkip(listConfig.Offset)
 }

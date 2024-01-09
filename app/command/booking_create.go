@@ -2,6 +2,7 @@ package command
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"github.com/cilloparch/cillop/cqrs"
@@ -85,13 +86,13 @@ func NewBookingCreateHandler(factory booking.Factory, repo booking.Repo, events 
 			EndDate:     endDate,
 			IsPublic:    cmd.IsPublic,
 			Listing: booking.Listing{
-				Title:        listing.Title,
+				Title:        strings.ToLower(listing.Title),
 				Slug:         listing.Slug,
-				Description:  listing.Description,
+				Description:  strings.ToLower(listing.Description),
 				BusinessName: listing.BusinessName,
-				CityName:     listing.CityName,
-				DistrictName: listing.DistrictName,
-				CountryName:  listing.CountryName,
+				CityName:     strings.ToLower(listing.CityName),
+				DistrictName: strings.ToLower(listing.DistrictName),
+				CountryName:  strings.ToLower(listing.CountryName),
 				Images:       listingImages,
 			},
 		})
