@@ -132,7 +132,17 @@ func (e *Entity) ToBusinessListDto() BookingBusinessListDto {
 	}
 }
 
-func (e *Entity) ToViewDto() BookingViewDto {
+func (e *Entity) ToViewDto(userId string, userName string) BookingViewDto {
+	guests := make([]Guest, 0)
+	if userId == e.User.UUID && userName == e.User.Name {
+		guests = e.Guests
+	} else {
+		for _, guest := range e.Guests {
+			if guest.IsPublic {
+				guests = append(guests, guest)
+			}
+		}
+	}
 	return BookingViewDto{
 		UUID:         e.UUID,
 		ListingUUID:  e.ListingUUID,
@@ -140,7 +150,7 @@ func (e *Entity) ToViewDto() BookingViewDto {
 		Listing:      e.Listing,
 		User:         e.User,
 		People:       e.People,
-		Guests:       e.Guests,
+		Guests:       guests,
 		State:        e.State,
 		IsPublic:     e.IsPublic,
 		Days:         e.Days,

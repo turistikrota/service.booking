@@ -293,6 +293,7 @@ func (h srv) BookingView(ctx *fiber.Ctx) error {
 	account := current_account.Parse(ctx)
 	if account != nil {
 		query.UserName = account.Name
+		query.UserId = current_user.Parse(ctx).UUID
 	}
 	res, err := h.app.Queries.BookingView(ctx.UserContext(), query)
 	if err != nil {
