@@ -20,6 +20,7 @@ type BookingViewDto struct {
 	UUID         string    `json:"uuid"`
 	ListingUUID  string    `json:"listingUUID"`
 	BusinessUUID string    `json:"businessUUID"`
+	User         User      `json:"user"`
 	Listing      Listing   `json:"listing"`
 	People       People    `json:"people"`
 	Guests       []Guest   `json:"guests"`
@@ -137,6 +138,7 @@ func (e *Entity) ToViewDto() BookingViewDto {
 		ListingUUID:  e.ListingUUID,
 		BusinessUUID: e.BusinessUUID,
 		Listing:      e.Listing,
+		User:         e.User,
 		People:       e.People,
 		Guests:       e.Guests,
 		State:        e.State,
