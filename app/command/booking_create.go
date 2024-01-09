@@ -2,14 +2,21 @@ package command
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"github.com/cilloparch/cillop/cqrs"
 	"github.com/cilloparch/cillop/i18np"
+	"github.com/turistikrota/service.booking/config"
 	"github.com/turistikrota/service.booking/domains/booking"
+	listing "github.com/turistikrota/service.booking/protos"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 type BookingCreateCmd struct {
+	Locale      string          `json:"-"`
 	ListingUUID string          `json:"-"`
 	User        booking.User    `json:"-"`
 	People      *booking.People `json:"people" validate:"required"`
@@ -24,7 +31,31 @@ type BookingCreateRes struct {
 
 type BookingCreateHandler cqrs.HandlerFunc[BookingCreateCmd, *BookingCreateRes]
 
-func NewBookingCreateHandler(factory booking.Factory, repo booking.Repo, events booking.Events) BookingCreateHandler {
+func NewBookingCreateHandler(factory booking.Factory, repo booking.Repo, events booking.Events, rpcConfig config.Rpc) BookingCreateHandler {
+
+	getListing := func(ctx context.Context, uuid string, locale string) (*listing.Entity, error) {
+		var opt grpc.DialOption
+		if !rpcConfig.ListingUsesSsl {
+			opt = grpc.WithTransportCredentials(insecure.NewCredentials())
+		} else {
+			opt = grpc.WithTransportCredentials(credentials.NewClientTLSFromCert(nil, ""))
+		}
+		conn, err := grpc.Dial(rpcConfig.ListingHost, opt)
+		if err != nil {
+			return nil, err
+		}
+		defer conn.Close()
+		c := listing.NewListingServiceClient(conn)
+		response, err := c.GetEntity(ctx, &listing.GetEntityRequest{
+			Uuid:   uuid,
+			Locale: locale,
+		})
+		if err != nil {
+			return nil, err
+		}
+		return response, nil
+	}
+
 	return func(ctx context.Context, cmd BookingCreateCmd) (*BookingCreateRes, *i18np.Error) {
 		startDate, _ := time.Parse("2006-01-02", cmd.StartDate)
 		endDate, _ := time.Parse("2006-01-02", cmd.EndDate)
@@ -35,6 +66,17 @@ func NewBookingCreateHandler(factory booking.Factory, repo booking.Repo, events 
 		if !available {
 			return nil, factory.Errors.NotAvailable()
 		}
+		listing, _err := getListing(ctx, cmd.ListingUUID, cmd.Locale)
+		if _err != nil {
+			return nil, factory.Errors.Failed(_err.Error())
+		}
+		listingImages := make([]booking.ListingImage, len(listing.Images))
+		for i, image := range listing.Images {
+			listingImages[i] = booking.ListingImage{
+				Url:   image.Url,
+				Order: int(image.Order),
+			}
+		}
 		e := factory.New(booking.NewConfig{
 			ListingUUID: cmd.ListingUUID,
 			People:      *cmd.People,
@@ -43,6 +85,16 @@ func NewBookingCreateHandler(factory booking.Factory, repo booking.Repo, events 
 			StartDate:   startDate,
 			EndDate:     endDate,
 			IsPublic:    cmd.IsPublic,
+			Listing: booking.Listing{
+				Title:        strings.ToLower(listing.Title),
+				Slug:         listing.Slug,
+				Description:  strings.ToLower(listing.Description),
+				BusinessName: listing.BusinessName,
+				CityName:     strings.ToLower(listing.CityName),
+				DistrictName: strings.ToLower(listing.DistrictName),
+				CountryName:  strings.ToLower(listing.CountryName),
+				Images:       listingImages,
+			},
 		})
 		error := factory.Validate(e)
 		if error != nil {

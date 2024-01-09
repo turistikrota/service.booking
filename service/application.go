@@ -41,7 +41,7 @@ func NewApplication(cnf Config) app.Application {
 
 	return app.Application{
 		Commands: app.Commands{
-			BookingCreate:            command.NewBookingCreateHandler(bookingFactory, bookingRepo, bookingEvents),
+			BookingCreate:            command.NewBookingCreateHandler(bookingFactory, bookingRepo, bookingEvents, cnf.App.Rpc),
 			BookingCancel:            command.NewBookingCancelHandler(bookingFactory, bookingRepo, bookingEvents),
 			BookingMarkPrivate:       command.NewBookingMarkPrivateHandler(bookingFactory, bookingRepo),
 			BookingPayTimeout:        command.NewBookingPayTimeoutHandler(bookingRepo),
@@ -65,8 +65,7 @@ func NewApplication(cnf Config) app.Application {
 			BookingListByBusiness:    query.NewBookingListByBusinessHandler(bookingRepo, cnf.CacheSrv),
 			BookingListByListing:     query.NewBookingListByListingHandler(bookingRepo, cnf.CacheSrv),
 			BookingListByUser:        query.NewBookingListByUserHandler(bookingRepo, cnf.CacheSrv),
-			BookingListMyAttendees:   query.NewBookingListMyAttendeesHandler(bookingRepo),
-			BookingListMyOrganized:   query.NewBookingListMyOrganizedHandler(bookingRepo),
+			BookingList:              query.NewBookingListHandler(bookingRepo),
 			BookingView:              query.NewBookingViewHandler(bookingRepo),
 
 			InviteGetByBookingUUID: query.NewInviteGetByBookingUUIDHandler(inviteRepo),

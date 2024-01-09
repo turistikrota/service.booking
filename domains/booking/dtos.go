@@ -5,6 +5,7 @@ import "time"
 type BookingListDto struct {
 	UUID       string    `json:"uuid"`
 	People     People    `json:"people"`
+	Listing    Listing   `json:"listing"`
 	Guests     []Guest   `json:"guests"`
 	State      State     `json:"state"`
 	IsPublic   *bool     `json:"isPublic"`
@@ -19,6 +20,7 @@ type BookingViewDto struct {
 	UUID         string    `json:"uuid"`
 	ListingUUID  string    `json:"listingUUID"`
 	BusinessUUID string    `json:"businessUUID"`
+	Listing      Listing   `json:"listing"`
 	People       People    `json:"people"`
 	Guests       []Guest   `json:"guests"`
 	Days         []Day     `json:"days"`
@@ -37,6 +39,7 @@ type BookingAdminViewDto struct {
 	ListingUUID  string    `json:"listingUUID"`
 	BusinessUUID string    `json:"businessUUID"`
 	User         User      `json:"user"`
+	Listing      Listing   `json:"listing"`
 	People       People    `json:"people"`
 	Guests       []Guest   `json:"guests"`
 	Days         []Day     `json:"days"`
@@ -54,6 +57,7 @@ type BookingAdminListDto struct {
 	UUID       string    `json:"uuid"`
 	User       User      `json:"user"`
 	People     People    `json:"people"`
+	Listing    Listing   `json:"listing"`
 	Guests     []Guest   `json:"guests"`
 	State      State     `json:"state"`
 	IsPublic   *bool     `json:"isPublic"`
@@ -68,6 +72,7 @@ type BookingBusinessViewDto struct {
 	UUID         string    `json:"uuid"`
 	ListingUUID  string    `json:"listingUUID"`
 	BusinessUUID string    `json:"businessUUID"`
+	Listing      Listing   `json:"listing"`
 	People       People    `json:"people"`
 	Guests       []Guest   `json:"guests"`
 	Days         []Day     `json:"days"`
@@ -84,6 +89,7 @@ type BookingBusinessViewDto struct {
 type BookingBusinessListDto struct {
 	UUID       string    `json:"uuid"`
 	People     People    `json:"people"`
+	Listing    Listing   `json:"listing"`
 	Guests     []Guest   `json:"guests"`
 	State      State     `json:"state"`
 	IsPublic   *bool     `json:"isPublic"`
@@ -98,6 +104,7 @@ func (e *Entity) ToListDto() BookingListDto {
 	return BookingListDto{
 		UUID:       e.UUID,
 		People:     e.People,
+		Listing:    e.Listing,
 		Guests:     e.Guests,
 		State:      e.State,
 		IsPublic:   e.IsPublic,
@@ -112,6 +119,7 @@ func (e *Entity) ToBusinessListDto() BookingBusinessListDto {
 	return BookingBusinessListDto{
 		UUID:       e.UUID,
 		People:     e.People,
+		Listing:    e.Listing,
 		Guests:     e.Guests,
 		State:      e.State,
 		IsPublic:   e.IsPublic,
@@ -128,6 +136,7 @@ func (e *Entity) ToViewDto() BookingViewDto {
 		UUID:         e.UUID,
 		ListingUUID:  e.ListingUUID,
 		BusinessUUID: e.BusinessUUID,
+		Listing:      e.Listing,
 		People:       e.People,
 		Guests:       e.Guests,
 		State:        e.State,
@@ -147,6 +156,7 @@ func (e *Entity) ToAdminViewDto() BookingAdminViewDto {
 		UUID:         e.UUID,
 		ListingUUID:  e.ListingUUID,
 		BusinessUUID: e.BusinessUUID,
+		Listing:      e.Listing,
 		People:       e.People,
 		User:         e.User,
 		Guests:       e.Guests,
@@ -167,6 +177,7 @@ func (e *Entity) ToAdminListDto() BookingAdminListDto {
 		UUID:       e.UUID,
 		People:     e.People,
 		Guests:     e.Guests,
+		Listing:    e.Listing,
 		State:      e.State,
 		IsPublic:   e.IsPublic,
 		Price:      e.Price,

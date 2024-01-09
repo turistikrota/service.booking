@@ -6,6 +6,7 @@ type Entity struct {
 	UUID         string    `json:"uuid" bson:"_id,omitempty"`
 	ListingUUID  string    `json:"listingUUID" bson:"listing_uuid"`
 	BusinessUUID string    `json:"businessUUID" bson:"business_uuid"`
+	Listing      Listing   `json:"listing" bson:"listing"`
 	People       People    `json:"people" bson:"people"`
 	User         User      `json:"user" bson:"user"`
 	Guests       []Guest   `json:"guests" bson:"guests"`
@@ -18,6 +19,22 @@ type Entity struct {
 	EndDate      time.Time `json:"endDate" bson:"end_date"`
 	CreatedAt    time.Time `json:"createdAt" bson:"created_at"`
 	UpdatedAt    time.Time `json:"updatedAt" bson:"updated_at"`
+}
+
+type Listing struct {
+	Title        string         `json:"title" bson:"title"`
+	Slug         string         `json:"slug" bson:"slug"`
+	Description  string         `json:"description" bson:"description"`
+	BusinessName string         `json:"businessName" bson:"business_name"`
+	CityName     string         `json:"cityName" bson:"city_name"`
+	DistrictName string         `json:"districtName" bson:"district_name"`
+	CountryName  string         `json:"countryName" bson:"country_name"`
+	Images       []ListingImage `json:"images" bson:"images"`
+}
+
+type ListingImage struct {
+	Url   string `json:"url" bson:"url"`
+	Order int    `json:"order" bson:"order"`
 }
 
 type User struct {

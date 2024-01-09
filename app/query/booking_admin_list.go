@@ -12,6 +12,7 @@ import (
 
 type BookingAdminListQuery struct {
 	*utils.Pagination
+	*booking.FilterEntity
 }
 
 type BookingAdminListRes struct {
@@ -23,8 +24,9 @@ type BookingAdminListHandler cqrs.HandlerFunc[BookingAdminListQuery, *BookingAdm
 func NewBookingAdminListHandler(repo booking.Repo) BookingAdminListHandler {
 	return func(ctx context.Context, query BookingAdminListQuery) (*BookingAdminListRes, *i18np.Error) {
 		query.Default()
+		query.FilterEntity.ForPrivate()
 		offset := (*query.Page - 1) * *query.Limit
-		res, err := repo.List(ctx, list.Config{
+		res, err := repo.List(ctx, *query.FilterEntity, list.Config{
 			Offset: offset,
 			Limit:  *query.Limit,
 		})

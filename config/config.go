@@ -21,6 +21,11 @@ type CacheRedis struct {
 	Db   int    `env:"REDIS_CACHE_DB"`
 }
 
+type Rpc struct {
+	ListingHost    string `env:"RPC_LISTING_HOST" envDefault:"localhost:3001"`
+	ListingUsesSsl bool   `env:"RPC_LISTING_USES_SSL" envDefault:"localhost:3001"`
+}
+
 type I18n struct {
 	Fallback string   `env:"I18N_FALLBACK_LANGUAGE" envDefault:"en"`
 	Dir      string   `env:"I18N_DIR" envDefault:"./src/locales"`
@@ -93,6 +98,7 @@ type App struct {
 		Booking MongoBooking
 		Invite  MongoInvite
 	}
+	Rpc         Rpc
 	Http        Http
 	HttpHeaders HttpHeaders
 	I18n        I18n
