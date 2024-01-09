@@ -45,12 +45,10 @@ type Repo interface {
 	RemoveGuest(ctx context.Context, uuid string, guest WithUser, user WithUser) *i18np.Error
 	MarkGuestAsPublic(ctx context.Context, uuid string, guest WithUser, user WithUser) *i18np.Error
 	MarkGuestAsPrivate(ctx context.Context, uuid string, guest WithUser, user WithUser) *i18np.Error
-	List(ctx context.Context, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
-	ListMyOrganized(ctx context.Context, user WithUser, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
-	ListMyAttendees(ctx context.Context, user WithUser, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
-	ListByBusiness(ctx context.Context, businessUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
-	ListByListing(ctx context.Context, listingUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
-	ListByUser(ctx context.Context, userName string, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
+	List(ctx context.Context, filter FilterEntity, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
+	ListByBusiness(ctx context.Context, filter FilterEntity, businessUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
+	ListByListing(ctx context.Context, filter FilterEntity, listingUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
+	ListByUser(ctx context.Context, filter FilterEntity, userName string, listConf list.Config) (*list.Result[*Entity], *i18np.Error)
 	GetDetailWithUser(ctx context.Context, uuid string, userUUID string, userName string) (*Entity, *bool, *i18np.Error)
 	CheckAvailability(ctx context.Context, listingUUID string, startDate time.Time, endDate time.Time) (bool, *i18np.Error)
 }
@@ -339,16 +337,13 @@ func (r *repo) MarkGuestAsPrivate(ctx context.Context, uuid string, guest WithUs
 	return r.helper.UpdateOne(ctx, filter, update)
 }
 
-func (r *repo) ListMyOrganized(ctx context.Context, user WithUser, listConf list.Config) (*list.Result[*Entity], *i18np.Error) {
-	filter := bson.M{
-		userField(userFields.UUID): user.UUID,
-		userField(userFields.Name): user.Name,
-	}
-	l, err := r.helper.GetListFilter(ctx, filter, r.listOptions(listConf))
+func (r *repo) List(ctx context.Context, filter FilterEntity, listConf list.Config) (*list.Result[*Entity], *i18np.Error) {
+	filters := r.filterToBson(filter)
+	l, err := r.helper.GetListFilter(ctx, filters, r.listOptions(listConf))
 	if err != nil {
 		return nil, err
 	}
-	filtered, _err := r.helper.GetFilterCount(ctx, filter)
+	filtered, _err := r.helper.GetFilterCount(ctx, filters)
 	if _err != nil {
 		return nil, _err
 	}
@@ -362,58 +357,16 @@ func (r *repo) ListMyOrganized(ctx context.Context, user WithUser, listConf list
 	}, nil
 }
 
-func (r *repo) List(ctx context.Context, listConf list.Config) (*list.Result[*Entity], *i18np.Error) {
-	filter := bson.M{}
-	l, err := r.helper.GetListFilter(ctx, filter, r.listOptions(listConf))
-	if err != nil {
-		return nil, err
-	}
-	filtered, _err := r.helper.GetFilterCount(ctx, filter)
-	if _err != nil {
-		return nil, _err
-	}
-	return &list.Result[*Entity]{
-		IsNext:        filtered > listConf.Offset+listConf.Limit,
-		IsPrev:        listConf.Offset > 0,
-		FilteredTotal: filtered,
-		Total:         filtered,
-		Page:          listConf.Offset/listConf.Limit + 1,
-		List:          l,
-	}, nil
-}
-
-func (r *repo) ListMyAttendees(ctx context.Context, user WithUser, listConf list.Config) (*list.Result[*Entity], *i18np.Error) {
-	filter := bson.M{
-		guestField(guestFields.UUID): user.UUID,
-		guestField(guestFields.Name): user.Name,
-	}
-	l, err := r.helper.GetListFilter(ctx, filter, r.listOptions(listConf))
-	if err != nil {
-		return nil, err
-	}
-	filtered, _err := r.helper.GetFilterCount(ctx, filter)
-	if _err != nil {
-		return nil, _err
-	}
-	return &list.Result[*Entity]{
-		IsNext:        filtered > listConf.Offset+listConf.Limit,
-		IsPrev:        listConf.Offset > 0,
-		FilteredTotal: filtered,
-		Total:         filtered,
-		Page:          listConf.Offset/listConf.Limit + 1,
-		List:          l,
-	}, nil
-}
-
-func (r *repo) ListByBusiness(ctx context.Context, businessUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error) {
-	filter := bson.M{
+func (r *repo) ListByBusiness(ctx context.Context, filter FilterEntity, businessUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error) {
+	filter.Type = ""
+	filters := r.filterToBson(filter, bson.M{
 		fields.BusinessUUID: businessUUID,
-	}
-	l, err := r.helper.GetListFilter(ctx, filter, r.listOptions(listConf))
+	})
+	l, err := r.helper.GetListFilter(ctx, filters, r.listOptions(listConf))
 	if err != nil {
 		return nil, err
 	}
-	filtered, _err := r.helper.GetFilterCount(ctx, filter)
+	filtered, _err := r.helper.GetFilterCount(ctx, filters)
 	if _err != nil {
 		return nil, _err
 	}
@@ -427,15 +380,16 @@ func (r *repo) ListByBusiness(ctx context.Context, businessUUID string, listConf
 	}, nil
 }
 
-func (r *repo) ListByListing(ctx context.Context, listingUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error) {
-	filter := bson.M{
+func (r *repo) ListByListing(ctx context.Context, filter FilterEntity, listingUUID string, listConf list.Config) (*list.Result[*Entity], *i18np.Error) {
+	filter.Type = ""
+	filters := r.filterToBson(filter, bson.M{
 		fields.ListingUUID: listingUUID,
-	}
-	l, err := r.helper.GetListFilter(ctx, filter, r.listOptions(listConf))
+	})
+	l, err := r.helper.GetListFilter(ctx, filters, r.listOptions(listConf))
 	if err != nil {
 		return nil, err
 	}
-	filtered, _err := r.helper.GetFilterCount(ctx, filter)
+	filtered, _err := r.helper.GetFilterCount(ctx, filters)
 	if _err != nil {
 		return nil, _err
 	}
@@ -449,8 +403,9 @@ func (r *repo) ListByListing(ctx context.Context, listingUUID string, listConf l
 	}, nil
 }
 
-func (r *repo) ListByUser(ctx context.Context, userName string, listConf list.Config) (*list.Result[*Entity], *i18np.Error) {
-	filter := bson.M{
+func (r *repo) ListByUser(ctx context.Context, filter FilterEntity, userName string, listConf list.Config) (*list.Result[*Entity], *i18np.Error) {
+	filter.Type = ""
+	filters := r.filterToBson(filter, bson.M{
 		"$or": []bson.M{
 			{
 				userField(userFields.Name): userName,
@@ -459,12 +414,12 @@ func (r *repo) ListByUser(ctx context.Context, userName string, listConf list.Co
 				guestField(guestFields.Name): userName,
 			},
 		},
-	}
-	l, err := r.helper.GetListFilter(ctx, filter, r.listOptions(listConf))
+	})
+	l, err := r.helper.GetListFilter(ctx, filters, r.listOptions(listConf))
 	if err != nil {
 		return nil, err
 	}
-	filtered, _err := r.helper.GetFilterCount(ctx, filter)
+	filtered, _err := r.helper.GetFilterCount(ctx, filters)
 	if _err != nil {
 		return nil, _err
 	}
