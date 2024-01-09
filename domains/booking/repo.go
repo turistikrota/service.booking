@@ -533,6 +533,7 @@ func (r *repo) CheckAvailability(ctx context.Context, listingUUID string, startD
 }
 
 func (r *repo) listOptions(listConfig list.Config) *options.FindOptions {
-	opts := options.Find()
-	return opts.SetLimit(listConfig.Limit).SetSkip(listConfig.Offset)
+	return options.Find().SetLimit(listConfig.Limit).SetSkip(listConfig.Offset).SetSort(bson.M{
+		fields.CreatedAt: -1,
+	})
 }
