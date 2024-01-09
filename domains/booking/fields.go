@@ -4,6 +4,7 @@ type fieldsType struct {
 	UUID         string
 	ListingUUID  string
 	BusinessUUID string
+	Listing      string
 	People       string
 	User         string
 	Guests       string
@@ -22,6 +23,17 @@ type peopleFieldsType struct {
 	Adult string
 	Kid   string
 	Baby  string
+}
+
+type listingFieldsType struct {
+	Title        string
+	Slug         string
+	Description  string
+	BusinessName string
+	CityName     string
+	DistrictName string
+	CountryName  string
+	Images       string
 }
 
 type userFieldsType struct {
@@ -44,6 +56,7 @@ var fields = fieldsType{
 	UUID:         "_id",
 	ListingUUID:  "listing_uuid",
 	BusinessUUID: "business_uuid",
+	Listing:      "listing",
 	People:       "people",
 	User:         "user",
 	Guests:       "guests",
@@ -56,6 +69,17 @@ var fields = fieldsType{
 	EndDate:      "end_date",
 	CreatedAt:    "createdAt",
 	UpdatedAt:    "updatedAt",
+}
+
+var listingFields = listingFieldsType{
+	Title:        "title",
+	Slug:         "slug",
+	Description:  "description",
+	BusinessName: "business_name",
+	CityName:     "city_name",
+	DistrictName: "district_name",
+	CountryName:  "country_name",
+	Images:       "images",
 }
 
 var peopleFields = peopleFieldsType{
@@ -93,4 +117,8 @@ func guestFieldInArray(key string) string {
 
 func dayField(key string) string {
 	return fields.Days + "." + key
+}
+
+func listingField(key string) string {
+	return fields.Listing + "." + key
 }
