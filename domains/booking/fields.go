@@ -67,8 +67,8 @@ var fields = fieldsType{
 	TotalPrice:   "total_price",
 	StartDate:    "start_date",
 	EndDate:      "end_date",
-	CreatedAt:    "createdAt",
-	UpdatedAt:    "updatedAt",
+	CreatedAt:    "created_at",
+	UpdatedAt:    "updated_at",
 }
 
 var listingFields = listingFieldsType{
