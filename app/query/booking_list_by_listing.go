@@ -12,18 +12,20 @@ import (
 	"github.com/turistikrota/service.booking/pkg/utils"
 )
 
-type BookingListByBusinessQuery struct {
+type BookingListByListingQuery struct {
 	*utils.Pagination
-	BusinessUUID string `params:"-" query:"-"`
+	*booking.FilterEntity
+	ListingUUID string `params:"uuid" query:"-" validate:"required,object_id"`
+	IsPublic    bool   `params:"-" query:"-"`
 }
 
-type BookingListByBusinessRes struct {
+type BookingListByListingRes struct {
 	List *list.Result[booking.BookingBusinessListDto]
 }
 
-type BookingListByBusinessHandler cqrs.HandlerFunc[BookingListByBusinessQuery, *BookingListByBusinessRes]
+type BookingListByListingHandler cqrs.HandlerFunc[BookingListByListingQuery, *BookingListByListingRes]
 
-func NewBookingListByBusinessHandler(repo booking.Repo, cacheSrv cache.Service) BookingListByBusinessHandler {
+func NewBookingListByListingHandler(repo booking.Repo, cacheSrv cache.Service) BookingListByListingHandler {
 	cache := cache.New[*list.Result[*booking.Entity]](cacheSrv)
 
 	createCacheEntity := func() *list.Result[*booking.Entity] {
@@ -36,16 +38,20 @@ func NewBookingListByBusinessHandler(repo booking.Repo, cacheSrv cache.Service) 
 			IsPrev:        false,
 		}
 	}
-	return func(ctx context.Context, query BookingListByBusinessQuery) (*BookingListByBusinessRes, *i18np.Error) {
+	return func(ctx context.Context, query BookingListByListingQuery) (*BookingListByListingRes, *i18np.Error) {
 		query.Default()
+		query.FilterEntity.ForPrivate()
+		if query.IsPublic {
+			query.FilterEntity.PublicView()
+		}
 		offset := (*query.Page - 1) * *query.Limit
 		cacheHandler := func() (*list.Result[*booking.Entity], *i18np.Error) {
-			return repo.ListByBusiness(ctx, query.BusinessUUID, list.Config{
+			return repo.ListByListing(ctx, *query.FilterEntity, query.ListingUUID, list.Config{
 				Offset: offset,
 				Limit:  *query.Limit,
 			})
 		}
-		res, err := cache.Creator(createCacheEntity).Handler(cacheHandler).Get(ctx, fmt.Sprintf("booking:by_business:uuid:%s:offset:%v:limit:%v", query.BusinessUUID, offset, *query.Limit))
+		res, err := cache.Creator(createCacheEntity).Handler(cacheHandler).Get(ctx, fmt.Sprintf("booking:by_listing:uuid:%s:offset:%v:limit:%v", query.ListingUUID, offset, *query.Limit))
 		if err != nil {
 			return nil, err
 		}
@@ -53,7 +59,7 @@ func NewBookingListByBusinessHandler(repo booking.Repo, cacheSrv cache.Service) 
 		for i, v := range res.List {
 			li[i] = v.ToBusinessListDto()
 		}
-		return &BookingListByBusinessRes{
+		return &BookingListByListingRes{
 			List: &list.Result[booking.BookingBusinessListDto]{
 				List:          li,
 				Total:         res.Total,

@@ -169,11 +169,34 @@ func (h srv) InviteDelete(ctx *fiber.Ctx) error {
 func (h srv) BookingAdminList(ctx *fiber.Ctx) error {
 	p := utils.Pagination{}
 	h.parseQuery(ctx, &p)
+	filter := booking.FilterEntity{}
+	h.parseQuery(ctx, &filter)
+	l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+	filter.Locale = l
 	query := query.BookingAdminListQuery{}
 	query.Pagination = &p
+	query.FilterEntity = &filter
 	res, err := h.app.Queries.BookingAdminList(ctx.UserContext(), query)
 	if err != nil {
-		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+		return result.Error(h.i18n.TranslateFromError(*err, l, a))
+	}
+	return result.SuccessDetail(Messages.Success.Ok, res.List)
+}
+
+func (h srv) BookingList(ctx *fiber.Ctx) error {
+	p := utils.Pagination{}
+	h.parseQuery(ctx, &p)
+	filter := booking.FilterEntity{}
+	h.parseQuery(ctx, &filter)
+	l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+	filter.Locale = l
+	query := query.BookingListQuery{}
+	query.Pagination = &p
+	query.FilterEntity = &filter
+	query.UserUUID = current_user.Parse(ctx).UUID
+	query.UserName = current_account.Parse(ctx).Name
+	res, err := h.app.Queries.BookingList(ctx.UserContext(), query)
+	if err != nil {
 		return result.Error(h.i18n.TranslateFromError(*err, l, a))
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res.List)
@@ -209,12 +232,17 @@ func (h srv) BookingListByBusiness(ctx *fiber.Ctx) error {
 	h.parseParams(ctx, &detail)
 	p := utils.Pagination{}
 	h.parseQuery(ctx, &p)
+	filter := booking.FilterEntity{}
+	h.parseQuery(ctx, &filter)
+	l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+	filter.Locale = l
 	query := query.BookingListByBusinessQuery{}
 	query.Pagination = &p
+	query.FilterEntity = &filter
 	query.BusinessUUID = detail.UUID
+	query.IsPublic = true
 	res, err := h.app.Queries.BookingListByBusiness(ctx.UserContext(), query)
 	if err != nil {
-		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
 		return result.ErrorDetail(h.i18n.TranslateFromError(*err, l, a), res)
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res.List)
@@ -225,12 +253,17 @@ func (h srv) BookingListByListing(ctx *fiber.Ctx) error {
 	h.parseParams(ctx, &detail)
 	p := utils.Pagination{}
 	h.parseQuery(ctx, &p)
+	filter := booking.FilterEntity{}
+	h.parseQuery(ctx, &filter)
+	l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+	filter.Locale = l
 	query := query.BookingListByListingQuery{}
 	query.Pagination = &p
+	query.FilterEntity = &filter
 	query.ListingUUID = detail.UUID
+	query.IsPublic = true
 	res, err := h.app.Queries.BookingListByListing(ctx.UserContext(), query)
 	if err != nil {
-		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
 		return result.ErrorDetail(h.i18n.TranslateFromError(*err, l, a), res)
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res.List)
@@ -241,40 +274,14 @@ func (h srv) BookingListByUser(ctx *fiber.Ctx) error {
 	h.parseQuery(ctx, &p)
 	query := query.BookingListByUserQuery{}
 	h.parseParams(ctx, &query)
+	filter := booking.FilterEntity{}
+	h.parseQuery(ctx, &filter)
+	l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+	filter.Locale = l
 	query.Pagination = &p
+	query.FilterEntity = &filter
 	res, err := h.app.Queries.BookingListByUser(ctx.UserContext(), query)
 	if err != nil {
-		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
-		return result.ErrorDetail(h.i18n.TranslateFromError(*err, l, a), res)
-	}
-	return result.SuccessDetail(Messages.Success.Ok, res.List)
-}
-
-func (h srv) BookingListMyAttendees(ctx *fiber.Ctx) error {
-	p := utils.Pagination{}
-	h.parseQuery(ctx, &p)
-	query := query.BookingListMyAttendeesQuery{}
-	query.Pagination = &p
-	query.UserUUID = current_user.Parse(ctx).UUID
-	query.UserName = current_account.Parse(ctx).Name
-	res, err := h.app.Queries.BookingListMyAttendees(ctx.UserContext(), query)
-	if err != nil {
-		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
-		return result.ErrorDetail(h.i18n.TranslateFromError(*err, l, a), res)
-	}
-	return result.SuccessDetail(Messages.Success.Ok, res.List)
-}
-
-func (h srv) BookingListMyOrganized(ctx *fiber.Ctx) error {
-	p := utils.Pagination{}
-	h.parseQuery(ctx, &p)
-	query := query.BookingListMyOrganizedQuery{}
-	query.Pagination = &p
-	query.UserUUID = current_user.Parse(ctx).UUID
-	query.UserName = current_account.Parse(ctx).Name
-	res, err := h.app.Queries.BookingListMyOrganized(ctx.UserContext(), query)
-	if err != nil {
-		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
 		return result.ErrorDetail(h.i18n.TranslateFromError(*err, l, a), res)
 	}
 	return result.SuccessDetail(Messages.Success.Ok, res.List)

@@ -10,26 +10,29 @@ import (
 	"github.com/turistikrota/service.booking/pkg/utils"
 )
 
-type BookingListMyAttendeesQuery struct {
+type BookingListQuery struct {
 	*utils.Pagination
+	*booking.FilterEntity
 	UserUUID string `params:"-" query:"-"`
 	UserName string `params:"-" query:"-"`
 }
 
-type BookingListMyAttendeesRes struct {
+type BookingListRes struct {
 	List *list.Result[booking.BookingListDto]
 }
 
-type BookingListMyAttendeesHandler cqrs.HandlerFunc[BookingListMyAttendeesQuery, *BookingListMyAttendeesRes]
+type BookingListHandler cqrs.HandlerFunc[BookingListQuery, *BookingListRes]
 
-func NewBookingListMyAttendeesHandler(repo booking.Repo) BookingListMyAttendeesHandler {
-	return func(ctx context.Context, query BookingListMyAttendeesQuery) (*BookingListMyAttendeesRes, *i18np.Error) {
+func NewBookingListHandler(repo booking.Repo) BookingListHandler {
+	return func(ctx context.Context, query BookingListQuery) (*BookingListRes, *i18np.Error) {
 		query.Default()
+		if query.FilterEntity.Type != booking.TypeGuest && query.FilterEntity.Type != booking.TypeOrganizer {
+			query.FilterEntity.Type = booking.TypeAny
+		}
+		query.FilterEntity.UserUUID = query.UserUUID
+		query.FilterEntity.UserName = query.UserName
 		offset := (*query.Page - 1) * *query.Limit
-		res, err := repo.ListMyAttendees(ctx, booking.WithUser{
-			UUID: query.UserUUID,
-			Name: query.UserName,
-		}, list.Config{
+		res, err := repo.List(ctx, *query.FilterEntity, list.Config{
 			Offset: offset,
 			Limit:  *query.Limit,
 		})
@@ -40,7 +43,7 @@ func NewBookingListMyAttendeesHandler(repo booking.Repo) BookingListMyAttendeesH
 		for i, v := range res.List {
 			li[i] = v.ToListDto()
 		}
-		return &BookingListMyAttendeesRes{
+		return &BookingListRes{
 			List: &list.Result[booking.BookingListDto]{
 				List:          li,
 				Total:         res.Total,

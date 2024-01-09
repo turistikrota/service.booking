@@ -14,6 +14,7 @@ import (
 
 type BookingListByUserQuery struct {
 	*utils.Pagination
+	*booking.FilterEntity
 	UserName string `params:"username" query:"-" validate:"required"`
 }
 
@@ -38,9 +39,10 @@ func NewBookingListByUserHandler(repo booking.Repo, cacheSrv cache.Service) Book
 	}
 	return func(ctx context.Context, query BookingListByUserQuery) (*BookingListByUserRes, *i18np.Error) {
 		query.Default()
+		query.FilterEntity.ForPrivate().PublicView()
 		offset := (*query.Page - 1) * *query.Limit
 		cacheHandler := func() (*list.Result[*booking.Entity], *i18np.Error) {
-			return repo.ListByUser(ctx, query.UserName, list.Config{
+			return repo.ListByUser(ctx, *query.FilterEntity, query.UserName, list.Config{
 				Offset: offset,
 				Limit:  *query.Limit,
 			})

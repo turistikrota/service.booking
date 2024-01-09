@@ -10,13 +10,26 @@ type FilterEntity struct {
 	UserUUID string `json:"-" query:"-"`
 	Query    string `query:"q,omitempty" validate:"omitempty,max=100"`
 	State    string `query:"state,omitempty" validate:"omitempty,oneof=canceled not_valid created pay_expired pay_cancelled pay_pending pay_paid pay_refunded"`
-	Type     string `query:"type,omitempty" validate:"omitempty,oneof=guest organizer"`
+	Type     string `query:"type,omitempty" validate:"omitempty,oneof=guest organizer any"`
+	IsPublic *bool  `query:"isPublic,omitempty" validate:"omitempty"`
 }
 
 const (
 	TypeGuest     = "guest"
 	TypeOrganizer = "organizer"
+	TypeAny       = "any"
 )
+
+func (e *FilterEntity) ForPrivate() *FilterEntity {
+	e.Type = ""
+	return e
+}
+
+func (e FilterEntity) PublicView() *FilterEntity {
+	isPublic := true
+	e.IsPublic = &isPublic
+	return &e
+}
 
 func (r *repo) filterToBson(filter FilterEntity, defaultFilters ...bson.M) bson.M {
 	list := make([]bson.M, 0)
@@ -26,6 +39,7 @@ func (r *repo) filterToBson(filter FilterEntity, defaultFilters ...bson.M) bson.
 	list = r.filterByQuery(list, filter)
 	list = r.filterByType(list, filter)
 	list = r.filterByState(list, filter)
+	list = r.filterByIsPublic(list, filter)
 	listLen := len(list)
 	if listLen == 0 {
 		return bson.M{}
@@ -36,6 +50,15 @@ func (r *repo) filterToBson(filter FilterEntity, defaultFilters ...bson.M) bson.
 	return bson.M{
 		"$and": list,
 	}
+}
+
+func (r *repo) filterByIsPublic(list []bson.M, filter FilterEntity) []bson.M {
+	if filter.IsPublic != nil {
+		list = append(list, bson.M{
+			guestField(guestFields.IsPublic): *filter.IsPublic,
+		})
+	}
+	return list
 }
 
 func (r *repo) filterByType(list []bson.M, filter FilterEntity) []bson.M {
@@ -50,6 +73,20 @@ func (r *repo) filterByType(list []bson.M, filter FilterEntity) []bson.M {
 			list = append(list, bson.M{
 				userField(guestFields.UUID): filter.UserUUID,
 				userField(guestFields.Name): filter.UserName,
+			})
+		}
+		if filter.Type == TypeAny {
+			list = append(list, bson.M{
+				"$or": []bson.M{
+					{
+						guestField(userFields.UUID): filter.UserUUID,
+						guestField(userFields.Name): filter.UserName,
+					},
+					{
+						userField(guestFields.UUID): filter.UserUUID,
+						userField(guestFields.Name): filter.UserName,
+					},
+				},
 			})
 		}
 	}

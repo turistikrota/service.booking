@@ -83,14 +83,15 @@ func (h srv) Listen() error {
 			admin.Get("/", h.adminRoute(config.Roles.Booking.List), h.rateLimit(), h.wrapWithTimeout(h.BookingAdminList))
 			admin.Get("/:uuid", h.adminRoute(config.Roles.Booking.View), h.rateLimit(), h.wrapWithTimeout(h.BookingAdminView))
 
-			router.Get("/:uuid/check-availability", h.rateLimit(), h.wrapWithTimeout(h.BookingCheckAvailability))
+			// business
+
 			router.Get("/by-business/:uuid", h.rateLimit(), h.wrapWithTimeout(h.BookingListByBusiness))
 			router.Get("/by-listing/:uuid", h.rateLimit(), h.wrapWithTimeout(h.BookingListByListing))
 			router.Get("/by-user/:username", h.rateLimit(), h.wrapWithTimeout(h.BookingListByUser))
 
-			router.Get("/my-attendees", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.BookingListMyAttendees))
-			router.Get("/my-organized", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.BookingListMyOrganized))
-			router.Get("/:uuid", h.currentUserAccess(), h.safeCurrentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.BookingView))
+			router.Get("/", h.currentUserAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.BookingList))
+			router.Get("/:uuid", h.currentUserAccess(), h.currentAccountAccess(), h.rateLimit(), h.wrapWithTimeout(h.BookingView))
+			router.Get("/:uuid/check-availability", h.rateLimit(), h.wrapWithTimeout(h.BookingCheckAvailability))
 
 			// invite query routes
 			router.Get("/guest/invite/by-booking/:uuid", h.currentUserAccess(), h.requiredAccess(), h.rateLimit(), h.currentAccountAccess(), h.wrapWithTimeout(h.InviteGetByBookingUUID))
