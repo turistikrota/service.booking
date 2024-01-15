@@ -12,6 +12,7 @@ type Entity struct {
 	Guests       []Guest   `json:"guests" bson:"guests"`
 	Days         []Day     `json:"days" bson:"days"`
 	State        State     `json:"state" bson:"state"`
+	Currency     Currency  `json:"currency" bson:"currency"`
 	IsPublic     *bool     `json:"isPublic" bson:"is_public"`
 	Price        float64   `json:"price" bson:"price"`
 	TotalPrice   float64   `json:"totalPrice" bson:"total_price"`
@@ -58,6 +59,14 @@ type People struct {
 	Kid   int `json:"kid" bson:"kid" validate:"gte=0"`
 	Baby  int `json:"baby" bson:"baby" validate:"gte=0"`
 }
+
+type Currency string
+
+const (
+	CurrencyTRY Currency = "TRY"
+	CurrencyUSD Currency = "USD"
+	CurrencyEUR Currency = "EUR"
+)
 
 type State string
 

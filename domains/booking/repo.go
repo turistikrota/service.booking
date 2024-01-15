@@ -24,6 +24,7 @@ type Validated struct {
 	BusinessUUID string
 	BusinessName string
 	TotalPrice   float64
+	Currency     Currency
 	Days         []Day
 }
 
@@ -111,6 +112,7 @@ func (r *repo) Validated(ctx context.Context, v *Validated) *i18np.Error {
 			fields.Days:         v.Days,
 			fields.Price:        v.TotalPrice,
 			fields.State:        PayPending,
+			fields.Currency:     v.Currency,
 			fields.UpdatedAt:    time.Now(),
 		},
 	}

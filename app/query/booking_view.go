@@ -10,6 +10,7 @@ import (
 
 type BookingViewQuery struct {
 	UUID     string `params:"uuid" validate:"required,object_id"`
+	UserId   string `params:"-"`
 	UserName string `params:"-"`
 }
 
@@ -26,7 +27,7 @@ func NewBookingViewHandler(repo booking.Repo) BookingViewHandler {
 			return nil, err
 		}
 		return &BookingViewRes{
-			Detail: res.ToViewDto(),
+			Detail: res.ToViewDto(query.UserId, query.UserName),
 		}, nil
 	}
 }
