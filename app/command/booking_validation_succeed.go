@@ -15,6 +15,7 @@ type BookingValidationSucceedCmd struct {
 	BusinessUUID string                `json:"business_uuid"`
 	BusinessName string                `json:"business_name"`
 	TotalPrice   float64               `json:"total_price"`
+	Currency     booking.Currency      `json:"currency"`
 	PricePerDays []listing.PricePerDay `json:"price_per_days"`
 }
 
@@ -41,6 +42,7 @@ func NewBookingValidationSucceedHandler(repo booking.Repo, events booking.Events
 			BusinessUUID: cmd.BusinessUUID,
 			BusinessName: cmd.BusinessName,
 			TotalPrice:   cmd.TotalPrice,
+			Currency:     cmd.Currency,
 			Days:         days,
 		})
 		if _err != nil {
@@ -51,6 +53,7 @@ func NewBookingValidationSucceedHandler(repo booking.Repo, events booking.Events
 			BusinessUUID: cmd.BusinessUUID,
 			ListingUUID:  cmd.ListingUUID,
 			Price:        cmd.TotalPrice,
+			Currency:     string(cmd.Currency),
 			User:         &book.User,
 		})
 		return &BookingValidationSucceedRes{}, nil

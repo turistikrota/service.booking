@@ -27,6 +27,7 @@ type (
 		ListingUUID  string  `json:"listing_uuid"`
 		User         *User   `json:"user"`
 		Price        float64 `json:"price"`
+		Currency     string  `json:"currency"`
 	}
 	CancelledEvent struct {
 		BookingUUID string `json:"booking_uuid"`

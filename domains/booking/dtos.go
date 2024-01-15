@@ -11,6 +11,7 @@ type BookingListDto struct {
 	IsPublic   *bool     `json:"isPublic"`
 	Price      float64   `json:"price"`
 	TotalPrice float64   `json:"totalPrice,omitempty"`
+	Currency   Currency  `json:"currency"`
 	StartDate  time.Time `json:"startDate"`
 	EndDate    time.Time `json:"endDate"`
 	CreatedAt  time.Time `json:"createdAt"`
@@ -29,6 +30,7 @@ type BookingViewDto struct {
 	IsPublic     *bool     `json:"isPublic"`
 	Price        float64   `json:"price"`
 	TotalPrice   float64   `json:"totalPrice,omitempty"`
+	Currency     Currency  `json:"currency"`
 	StartDate    time.Time `json:"startDate"`
 	EndDate      time.Time `json:"endDate"`
 	CreatedAt    time.Time `json:"createdAt"`
@@ -48,6 +50,7 @@ type BookingAdminViewDto struct {
 	IsPublic     *bool     `json:"isPublic"`
 	Price        float64   `json:"price"`
 	TotalPrice   float64   `json:"totalPrice,omitempty"`
+	Currency     Currency  `json:"currency"`
 	StartDate    time.Time `json:"startDate"`
 	EndDate      time.Time `json:"endDate"`
 	CreatedAt    time.Time `json:"createdAt"`
@@ -64,6 +67,7 @@ type BookingAdminListDto struct {
 	IsPublic   *bool     `json:"isPublic"`
 	Price      float64   `json:"price"`
 	TotalPrice float64   `json:"totalPrice,omitempty"`
+	Currency   Currency  `json:"currency"`
 	StartDate  time.Time `json:"startDate"`
 	EndDate    time.Time `json:"endDate"`
 	CreatedAt  time.Time `json:"createdAt"`
@@ -81,6 +85,7 @@ type BookingBusinessViewDto struct {
 	IsPublic     *bool     `json:"isPublic"`
 	Price        float64   `json:"price"`
 	TotalPrice   float64   `json:"totalPrice,omitempty"`
+	Currency     Currency  `json:"currency"`
 	StartDate    time.Time `json:"startDate"`
 	EndDate      time.Time `json:"endDate"`
 	CreatedAt    time.Time `json:"createdAt"`
@@ -96,6 +101,7 @@ type BookingBusinessListDto struct {
 	IsPublic   *bool     `json:"isPublic"`
 	Price      float64   `json:"price"`
 	TotalPrice float64   `json:"totalPrice,omitempty"`
+	Currency   Currency  `json:"currency"`
 	StartDate  time.Time `json:"startDate"`
 	EndDate    time.Time `json:"endDate"`
 	CreatedAt  time.Time `json:"createdAt"`
@@ -111,6 +117,7 @@ func (e *Entity) ToListDto() BookingListDto {
 		IsPublic:   e.IsPublic,
 		Price:      e.Price,
 		TotalPrice: e.TotalPrice,
+		Currency:   e.Currency,
 		StartDate:  e.StartDate,
 		EndDate:    e.EndDate,
 		CreatedAt:  e.CreatedAt,
@@ -126,6 +133,7 @@ func (e *Entity) ToBusinessListDto() BookingBusinessListDto {
 		IsPublic:   e.IsPublic,
 		Price:      e.Price,
 		TotalPrice: e.TotalPrice,
+		Currency:   e.Currency,
 		StartDate:  e.StartDate,
 		EndDate:    e.EndDate,
 		CreatedAt:  e.CreatedAt,
@@ -156,6 +164,7 @@ func (e *Entity) ToViewDto(userId string, userName string) BookingViewDto {
 		Days:         e.Days,
 		Price:        e.Price,
 		TotalPrice:   e.TotalPrice,
+		Currency:     e.Currency,
 		StartDate:    e.StartDate,
 		EndDate:      e.EndDate,
 		CreatedAt:    e.CreatedAt,
@@ -177,6 +186,7 @@ func (e *Entity) ToAdminViewDto() BookingAdminViewDto {
 		Days:         e.Days,
 		Price:        e.Price,
 		TotalPrice:   e.TotalPrice,
+		Currency:     e.Currency,
 		StartDate:    e.StartDate,
 		EndDate:      e.EndDate,
 		CreatedAt:    e.CreatedAt,
@@ -194,6 +204,7 @@ func (e *Entity) ToAdminListDto() BookingAdminListDto {
 		IsPublic:   e.IsPublic,
 		Price:      e.Price,
 		TotalPrice: e.TotalPrice,
+		Currency:   e.Currency,
 		StartDate:  e.StartDate,
 		EndDate:    e.EndDate,
 		CreatedAt:  e.CreatedAt,
