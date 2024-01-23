@@ -79,6 +79,7 @@ type BookingBusinessViewDto struct {
 	UUID         string        `json:"uuid"`
 	ListingUUID  string        `json:"listingUUID"`
 	BusinessUUID string        `json:"businessUUID"`
+	User         User          `json:"user"`
 	Listing      Listing       `json:"listing"`
 	People       People        `json:"people"`
 	CancelReason *CancelReason `json:"cancelReason,omitempty"`
@@ -98,6 +99,7 @@ type BookingBusinessViewDto struct {
 type BookingBusinessListDto struct {
 	UUID       string    `json:"uuid"`
 	People     People    `json:"people"`
+	User       User      `json:"user"`
 	Listing    Listing   `json:"listing"`
 	Guests     []Guest   `json:"guests"`
 	State      State     `json:"state"`
@@ -131,6 +133,7 @@ func (e *Entity) ToBusinessListDto() BookingBusinessListDto {
 		UUID:       e.UUID,
 		People:     e.People,
 		Listing:    e.Listing,
+		User:       e.User,
 		Guests:     e.Guests,
 		State:      e.State,
 		IsPublic:   e.IsPublic,
@@ -140,6 +143,29 @@ func (e *Entity) ToBusinessListDto() BookingBusinessListDto {
 		StartDate:  e.StartDate,
 		EndDate:    e.EndDate,
 		CreatedAt:  e.CreatedAt,
+	}
+}
+
+func (e *Entity) ToBookingBusinessViewDto() BookingBusinessViewDto {
+	return BookingBusinessViewDto{
+		UUID:         e.UUID,
+		ListingUUID:  e.ListingUUID,
+		BusinessUUID: e.BusinessUUID,
+		Listing:      e.Listing,
+		User:         e.User,
+		CancelReason: e.CancelReason,
+		People:       e.People,
+		Guests:       e.Guests,
+		Days:         e.Days,
+		State:        e.State,
+		IsPublic:     e.IsPublic,
+		Price:        e.Price,
+		TotalPrice:   e.TotalPrice,
+		Currency:     e.Currency,
+		StartDate:    e.StartDate,
+		EndDate:      e.EndDate,
+		CreatedAt:    e.CreatedAt,
+		UpdatedAt:    e.UpdatedAt,
 	}
 }
 

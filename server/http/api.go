@@ -278,6 +278,37 @@ func (h srv) BookingListByBusiness(ctx *fiber.Ctx) error {
 	return result.SuccessDetail(Messages.Success.Ok, res.List)
 }
 
+func (h srv) BookingListByBusinessAuthorized(ctx *fiber.Ctx) error {
+	p := utils.Pagination{}
+	h.parseQuery(ctx, &p)
+	filter := booking.FilterEntity{}
+	h.parseQuery(ctx, &filter)
+	l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+	filter.Locale = l
+	query := query.BookingListByBusinessQuery{}
+	query.Pagination = &p
+	query.FilterEntity = &filter
+	query.BusinessUUID = current_business.Parse(ctx).UUID
+	query.IsPublic = false
+	res, err := h.app.Queries.BookingListByBusiness(ctx.UserContext(), query)
+	if err != nil {
+		return result.ErrorDetail(h.i18n.TranslateFromError(*err, l, a), res)
+	}
+	return result.SuccessDetail(Messages.Success.Ok, res.List)
+}
+
+func (h srv) BookingViewByBusiness(ctx *fiber.Ctx) error {
+	query := query.BookingViewBusinessQuery{}
+	h.parseParams(ctx, &query)
+	query.BusinessUUID = current_business.Parse(ctx).UUID
+	res, err := h.app.Queries.BookingViewBusiness(ctx.UserContext(), query)
+	if err != nil {
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+		return result.ErrorDetail(h.i18n.TranslateFromError(*err, l, a), res)
+	}
+	return result.SuccessDetail(Messages.Success.Ok, res.Detail)
+}
+
 func (h srv) BookingListByListing(ctx *fiber.Ctx) error {
 	detail := command.BookingDetailCmd{}
 	h.parseParams(ctx, &detail)

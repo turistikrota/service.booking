@@ -40,6 +40,7 @@ type Queries struct {
 	BookingListByUser        query.BookingListByUserHandler
 	BookingList              query.BookingListHandler
 	BookingView              query.BookingViewHandler
+	BookingViewBusiness      query.BookingViewBusinessHandler
 
 	InviteGetByBookingUUID query.InviteGetByBookingUUIDHandler
 	InviteGetByEmail       query.InviteGetByEmailHandler
