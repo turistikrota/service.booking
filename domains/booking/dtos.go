@@ -143,6 +143,27 @@ func (e *Entity) ToBusinessListDto() BookingBusinessListDto {
 	}
 }
 
+func (e *Entity) ToBookingBusinessViewDto() BookingBusinessViewDto {
+	return BookingBusinessViewDto{
+		UUID:         e.UUID,
+		ListingUUID:  e.ListingUUID,
+		BusinessUUID: e.BusinessUUID,
+		Listing:      e.Listing,
+		People:       e.People,
+		Guests:       e.Guests,
+		Days:         e.Days,
+		State:        e.State,
+		IsPublic:     e.IsPublic,
+		Price:        e.Price,
+		TotalPrice:   e.TotalPrice,
+		Currency:     e.Currency,
+		StartDate:    e.StartDate,
+		EndDate:      e.EndDate,
+		CreatedAt:    e.CreatedAt,
+		UpdatedAt:    e.UpdatedAt,
+	}
+}
+
 func (e *Entity) ToViewDto(userId string, userName string) BookingViewDto {
 	guests := make([]Guest, 0)
 	if userId == e.User.UUID && userName == e.User.Name {

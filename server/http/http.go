@@ -87,6 +87,8 @@ func (h srv) Listen() error {
 
 			// business
 			business := router.Group("/business", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess())
+			business.Get("/", h.currentBusinessAccess(config.Roles.Booking.Super, config.Roles.Booking.List), h.rateLimit(), h.wrapWithTimeout(h.BookingListByBusinessAuthorized))
+			business.Get("/:uuid", h.currentBusinessAccess(config.Roles.Booking.Super, config.Roles.Booking.View), h.rateLimit(), h.wrapWithTimeout(h.BookingViewByBusiness))
 			business.Patch("/:uuid/cancel", h.currentBusinessAccess(config.Roles.Booking.Super, config.Roles.Booking.Cancel), h.rateLimit(), h.wrapWithTimeout(h.BookingCancelAsBusiness))
 
 			router.Get("/by-business/:uuid", h.rateLimit(), h.wrapWithTimeout(h.BookingListByBusiness))
