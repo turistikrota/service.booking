@@ -60,19 +60,20 @@ type BookingAdminViewDto struct {
 }
 
 type BookingAdminListDto struct {
-	UUID       string    `json:"uuid"`
-	User       User      `json:"user"`
-	People     People    `json:"people"`
-	Listing    Listing   `json:"listing"`
-	Guests     []Guest   `json:"guests"`
-	State      State     `json:"state"`
-	IsPublic   *bool     `json:"isPublic"`
-	Price      float64   `json:"price"`
-	TotalPrice float64   `json:"totalPrice,omitempty"`
-	Currency   Currency  `json:"currency"`
-	StartDate  time.Time `json:"startDate"`
-	EndDate    time.Time `json:"endDate"`
-	CreatedAt  time.Time `json:"createdAt"`
+	UUID        string    `json:"uuid"`
+	ListingUUID string    `json:"listingUUID"`
+	User        User      `json:"user"`
+	People      People    `json:"people"`
+	Listing     Listing   `json:"listing"`
+	Guests      []Guest   `json:"guests"`
+	State       State     `json:"state"`
+	IsPublic    *bool     `json:"isPublic"`
+	Price       float64   `json:"price"`
+	TotalPrice  float64   `json:"totalPrice,omitempty"`
+	Currency    Currency  `json:"currency"`
+	StartDate   time.Time `json:"startDate"`
+	EndDate     time.Time `json:"endDate"`
+	CreatedAt   time.Time `json:"createdAt"`
 }
 
 type BookingBusinessViewDto struct {
@@ -97,19 +98,20 @@ type BookingBusinessViewDto struct {
 }
 
 type BookingBusinessListDto struct {
-	UUID       string    `json:"uuid"`
-	People     People    `json:"people"`
-	User       User      `json:"user"`
-	Listing    Listing   `json:"listing"`
-	Guests     []Guest   `json:"guests"`
-	State      State     `json:"state"`
-	IsPublic   *bool     `json:"isPublic"`
-	Price      float64   `json:"price"`
-	TotalPrice float64   `json:"totalPrice,omitempty"`
-	Currency   Currency  `json:"currency"`
-	StartDate  time.Time `json:"startDate"`
-	EndDate    time.Time `json:"endDate"`
-	CreatedAt  time.Time `json:"createdAt"`
+	UUID        string    `json:"uuid"`
+	ListingUUID string    `json:"listingUUID"`
+	People      People    `json:"people"`
+	User        User      `json:"user"`
+	Listing     Listing   `json:"listing"`
+	Guests      []Guest   `json:"guests"`
+	State       State     `json:"state"`
+	IsPublic    *bool     `json:"isPublic"`
+	Price       float64   `json:"price"`
+	TotalPrice  float64   `json:"totalPrice,omitempty"`
+	Currency    Currency  `json:"currency"`
+	StartDate   time.Time `json:"startDate"`
+	EndDate     time.Time `json:"endDate"`
+	CreatedAt   time.Time `json:"createdAt"`
 }
 
 func (e *Entity) ToListDto() BookingListDto {
@@ -130,19 +132,20 @@ func (e *Entity) ToListDto() BookingListDto {
 }
 func (e *Entity) ToBusinessListDto() BookingBusinessListDto {
 	return BookingBusinessListDto{
-		UUID:       e.UUID,
-		People:     e.People,
-		Listing:    e.Listing,
-		User:       e.User,
-		Guests:     e.Guests,
-		State:      e.State,
-		IsPublic:   e.IsPublic,
-		Price:      e.Price,
-		TotalPrice: e.TotalPrice,
-		Currency:   e.Currency,
-		StartDate:  e.StartDate,
-		EndDate:    e.EndDate,
-		CreatedAt:  e.CreatedAt,
+		UUID:        e.UUID,
+		ListingUUID: e.ListingUUID,
+		People:      e.People,
+		Listing:     e.Listing,
+		User:        e.User,
+		Guests:      e.Guests,
+		State:       e.State,
+		IsPublic:    e.IsPublic,
+		Price:       e.Price,
+		TotalPrice:  e.TotalPrice,
+		Currency:    e.Currency,
+		StartDate:   e.StartDate,
+		EndDate:     e.EndDate,
+		CreatedAt:   e.CreatedAt,
 	}
 }
 
@@ -227,18 +230,19 @@ func (e *Entity) ToAdminViewDto() BookingAdminViewDto {
 
 func (e *Entity) ToAdminListDto() BookingAdminListDto {
 	return BookingAdminListDto{
-		UUID:       e.UUID,
-		People:     e.People,
-		Guests:     e.Guests,
-		Listing:    e.Listing,
-		State:      e.State,
-		IsPublic:   e.IsPublic,
-		Price:      e.Price,
-		TotalPrice: e.TotalPrice,
-		Currency:   e.Currency,
-		StartDate:  e.StartDate,
-		EndDate:    e.EndDate,
-		CreatedAt:  e.CreatedAt,
-		User:       e.User,
+		UUID:        e.UUID,
+		ListingUUID: e.ListingUUID,
+		People:      e.People,
+		Guests:      e.Guests,
+		Listing:     e.Listing,
+		State:       e.State,
+		IsPublic:    e.IsPublic,
+		Price:       e.Price,
+		TotalPrice:  e.TotalPrice,
+		Currency:    e.Currency,
+		StartDate:   e.StartDate,
+		EndDate:     e.EndDate,
+		CreatedAt:   e.CreatedAt,
+		User:        e.User,
 	}
 }
