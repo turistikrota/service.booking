@@ -3,24 +3,25 @@ package booking
 import "time"
 
 type Entity struct {
-	UUID         string        `json:"uuid" bson:"_id,omitempty"`
-	ListingUUID  string        `json:"listingUUID" bson:"listing_uuid"`
-	BusinessUUID string        `json:"businessUUID" bson:"business_uuid"`
-	Listing      Listing       `json:"listing" bson:"listing"`
-	People       People        `json:"people" bson:"people"`
-	User         User          `json:"user" bson:"user"`
-	Guests       []Guest       `json:"guests" bson:"guests"`
-	Days         []Day         `json:"days" bson:"days"`
-	State        State         `json:"state" bson:"state"`
-	Currency     Currency      `json:"currency" bson:"currency"`
-	CancelReason *CancelReason `json:"cancelReason,omitempty" bson:"cancel_reason,omitempty"`
-	IsPublic     *bool         `json:"isPublic" bson:"is_public"`
-	Price        float64       `json:"price" bson:"price"`
-	TotalPrice   float64       `json:"totalPrice" bson:"total_price"`
-	StartDate    time.Time     `json:"startDate" bson:"start_date"`
-	EndDate      time.Time     `json:"endDate" bson:"end_date"`
-	CreatedAt    time.Time     `json:"createdAt" bson:"created_at"`
-	UpdatedAt    time.Time     `json:"updatedAt" bson:"updated_at"`
+	UUID         string             `json:"uuid" bson:"_id,omitempty"`
+	ListingUUID  string             `json:"listingUUID" bson:"listing_uuid"`
+	BusinessUUID string             `json:"businessUUID" bson:"business_uuid"`
+	Listing      Listing            `json:"listing" bson:"listing"`
+	People       People             `json:"people" bson:"people"`
+	User         User               `json:"user" bson:"user"`
+	Guests       []Guest            `json:"guests" bson:"guests"`
+	Days         []Day              `json:"days" bson:"days"`
+	State        State              `json:"state" bson:"state"`
+	Currency     Currency           `json:"currency" bson:"currency"`
+	CancelReason *CancelReason      `json:"cancelReason,omitempty" bson:"cancel_reason,omitempty"`
+	Errors       []*ValidationError `json:"errors,omitempty" bson:"errors,omitempty"`
+	IsPublic     *bool              `json:"isPublic" bson:"is_public"`
+	Price        float64            `json:"price" bson:"price"`
+	TotalPrice   float64            `json:"totalPrice" bson:"total_price"`
+	StartDate    time.Time          `json:"startDate" bson:"start_date"`
+	EndDate      time.Time          `json:"endDate" bson:"end_date"`
+	CreatedAt    time.Time          `json:"createdAt" bson:"created_at"`
+	UpdatedAt    time.Time          `json:"updatedAt" bson:"updated_at"`
 }
 
 type CancelReason struct {

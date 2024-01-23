@@ -9,6 +9,7 @@ type fieldsType struct {
 	User         string
 	Guests       string
 	CancelReason string
+	Errors       string
 	Days         string
 	State        string
 	IsPublic     string
@@ -63,6 +64,7 @@ var fields = fieldsType{
 	User:         "user",
 	CancelReason: "cancel_reason",
 	Guests:       "guests",
+	Errors:       "errors",
 	Days:         "days",
 	State:        "state",
 	Currency:     "currency",
