@@ -72,3 +72,5 @@ error_invite_timeout = 'Davet zaman aşımına uğramış.'
 error_invite_same_user = 'Davet eden ve davet edilen aynı kullanıcı olamaz.'
 
 user_expired = 'Kullanıcı süresi doldu.'
+
+listing_not_active = 'İlan aktif değil.'

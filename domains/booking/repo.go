@@ -43,7 +43,7 @@ type Repo interface {
 	MarkPaid(ctx context.Context, uuid string, totalPrice float64) *i18np.Error
 	MarkRefunded(ctx context.Context, uuid string) *i18np.Error
 	MarkPayCancelled(ctx context.Context, uuid string) *i18np.Error
-	MarkNotValid(ctx context.Context, uuid string) *i18np.Error
+	MarkNotValid(ctx context.Context, uuid string, errors []*ValidationError) *i18np.Error
 	MarkPublic(ctx context.Context, uuid string) *i18np.Error
 	MarkPrivate(ctx context.Context, uuid string) *i18np.Error
 	GetByUUID(ctx context.Context, uuid string) (*Entity, *i18np.Error)
@@ -249,7 +249,7 @@ func (r *repo) MarkRefunded(ctx context.Context, uuid string) *i18np.Error {
 	return r.helper.UpdateOne(ctx, filter, update)
 }
 
-func (r *repo) MarkNotValid(ctx context.Context, uuid string) *i18np.Error {
+func (r *repo) MarkNotValid(ctx context.Context, uuid string, errors []*ValidationError) *i18np.Error {
 	id, err := mongo2.TransformId(uuid)
 	if err != nil {
 		return r.factory.Errors.InvalidUUID()
@@ -260,6 +260,7 @@ func (r *repo) MarkNotValid(ctx context.Context, uuid string) *i18np.Error {
 	update := bson.M{
 		"$set": bson.M{
 			fields.State:     NotValid,
+			fields.Errors:    errors,
 			fields.UpdatedAt: time.Now(),
 		},
 	}

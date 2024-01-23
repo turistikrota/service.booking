@@ -18,45 +18,47 @@ type BookingListDto struct {
 }
 
 type BookingViewDto struct {
-	UUID         string        `json:"uuid"`
-	ListingUUID  string        `json:"listingUUID"`
-	BusinessUUID string        `json:"businessUUID"`
-	User         User          `json:"user"`
-	CancelReason *CancelReason `json:"cancelReason,omitempty"`
-	Listing      Listing       `json:"listing"`
-	People       People        `json:"people"`
-	Guests       []Guest       `json:"guests"`
-	Days         []Day         `json:"days"`
-	State        State         `json:"state"`
-	IsPublic     *bool         `json:"isPublic"`
-	Price        float64       `json:"price"`
-	TotalPrice   float64       `json:"totalPrice,omitempty"`
-	Currency     Currency      `json:"currency"`
-	StartDate    time.Time     `json:"startDate"`
-	EndDate      time.Time     `json:"endDate"`
-	CreatedAt    time.Time     `json:"createdAt"`
-	UpdatedAt    time.Time     `json:"updatedAt"`
+	UUID         string             `json:"uuid"`
+	ListingUUID  string             `json:"listingUUID"`
+	BusinessUUID string             `json:"businessUUID"`
+	User         User               `json:"user"`
+	Errors       []*ValidationError `json:"errors,omitempty"`
+	CancelReason *CancelReason      `json:"cancelReason,omitempty"`
+	Listing      Listing            `json:"listing"`
+	People       People             `json:"people"`
+	Guests       []Guest            `json:"guests"`
+	Days         []Day              `json:"days"`
+	State        State              `json:"state"`
+	IsPublic     *bool              `json:"isPublic"`
+	Price        float64            `json:"price"`
+	TotalPrice   float64            `json:"totalPrice,omitempty"`
+	Currency     Currency           `json:"currency"`
+	StartDate    time.Time          `json:"startDate"`
+	EndDate      time.Time          `json:"endDate"`
+	CreatedAt    time.Time          `json:"createdAt"`
+	UpdatedAt    time.Time          `json:"updatedAt"`
 }
 
 type BookingAdminViewDto struct {
-	UUID         string        `json:"uuid"`
-	ListingUUID  string        `json:"listingUUID"`
-	BusinessUUID string        `json:"businessUUID"`
-	User         User          `json:"user"`
-	CancelReason *CancelReason `json:"cancelReason,omitempty"`
-	Listing      Listing       `json:"listing"`
-	People       People        `json:"people"`
-	Guests       []Guest       `json:"guests"`
-	Days         []Day         `json:"days"`
-	State        State         `json:"state"`
-	IsPublic     *bool         `json:"isPublic"`
-	Price        float64       `json:"price"`
-	TotalPrice   float64       `json:"totalPrice,omitempty"`
-	Currency     Currency      `json:"currency"`
-	StartDate    time.Time     `json:"startDate"`
-	EndDate      time.Time     `json:"endDate"`
-	CreatedAt    time.Time     `json:"createdAt"`
-	UpdatedAt    time.Time     `json:"updatedAt"`
+	UUID         string             `json:"uuid"`
+	ListingUUID  string             `json:"listingUUID"`
+	BusinessUUID string             `json:"businessUUID"`
+	User         User               `json:"user"`
+	Errors       []*ValidationError `json:"errors,omitempty"`
+	CancelReason *CancelReason      `json:"cancelReason,omitempty"`
+	Listing      Listing            `json:"listing"`
+	People       People             `json:"people"`
+	Guests       []Guest            `json:"guests"`
+	Days         []Day              `json:"days"`
+	State        State              `json:"state"`
+	IsPublic     *bool              `json:"isPublic"`
+	Price        float64            `json:"price"`
+	TotalPrice   float64            `json:"totalPrice,omitempty"`
+	Currency     Currency           `json:"currency"`
+	StartDate    time.Time          `json:"startDate"`
+	EndDate      time.Time          `json:"endDate"`
+	CreatedAt    time.Time          `json:"createdAt"`
+	UpdatedAt    time.Time          `json:"updatedAt"`
 }
 
 type BookingAdminListDto struct {
@@ -77,24 +79,25 @@ type BookingAdminListDto struct {
 }
 
 type BookingBusinessViewDto struct {
-	UUID         string        `json:"uuid"`
-	ListingUUID  string        `json:"listingUUID"`
-	BusinessUUID string        `json:"businessUUID"`
-	User         User          `json:"user"`
-	Listing      Listing       `json:"listing"`
-	People       People        `json:"people"`
-	CancelReason *CancelReason `json:"cancelReason,omitempty"`
-	Guests       []Guest       `json:"guests"`
-	Days         []Day         `json:"days"`
-	State        State         `json:"state"`
-	IsPublic     *bool         `json:"isPublic"`
-	Price        float64       `json:"price"`
-	TotalPrice   float64       `json:"totalPrice,omitempty"`
-	Currency     Currency      `json:"currency"`
-	StartDate    time.Time     `json:"startDate"`
-	EndDate      time.Time     `json:"endDate"`
-	CreatedAt    time.Time     `json:"createdAt"`
-	UpdatedAt    time.Time     `json:"updatedAt"`
+	UUID         string             `json:"uuid"`
+	ListingUUID  string             `json:"listingUUID"`
+	BusinessUUID string             `json:"businessUUID"`
+	User         User               `json:"user"`
+	Listing      Listing            `json:"listing"`
+	People       People             `json:"people"`
+	Errors       []*ValidationError `json:"errors,omitempty"`
+	CancelReason *CancelReason      `json:"cancelReason,omitempty"`
+	Guests       []Guest            `json:"guests"`
+	Days         []Day              `json:"days"`
+	State        State              `json:"state"`
+	IsPublic     *bool              `json:"isPublic"`
+	Price        float64            `json:"price"`
+	TotalPrice   float64            `json:"totalPrice,omitempty"`
+	Currency     Currency           `json:"currency"`
+	StartDate    time.Time          `json:"startDate"`
+	EndDate      time.Time          `json:"endDate"`
+	CreatedAt    time.Time          `json:"createdAt"`
+	UpdatedAt    time.Time          `json:"updatedAt"`
 }
 
 type BookingBusinessListDto struct {
@@ -155,6 +158,7 @@ func (e *Entity) ToBookingBusinessViewDto() BookingBusinessViewDto {
 		ListingUUID:  e.ListingUUID,
 		BusinessUUID: e.BusinessUUID,
 		Listing:      e.Listing,
+		Errors:       e.Errors,
 		User:         e.User,
 		CancelReason: e.CancelReason,
 		People:       e.People,
@@ -189,6 +193,7 @@ func (e *Entity) ToViewDto(userId string, userName string) BookingViewDto {
 		BusinessUUID: e.BusinessUUID,
 		Listing:      e.Listing,
 		User:         e.User,
+		Errors:       e.Errors,
 		People:       e.People,
 		Guests:       guests,
 		State:        e.State,
@@ -215,6 +220,7 @@ func (e *Entity) ToAdminViewDto() BookingAdminViewDto {
 		User:         e.User,
 		Guests:       e.Guests,
 		State:        e.State,
+		Errors:       e.Errors,
 		CancelReason: e.CancelReason,
 		IsPublic:     e.IsPublic,
 		Days:         e.Days,

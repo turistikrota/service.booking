@@ -20,7 +20,7 @@ type BookingValidationFailedHandler cqrs.HandlerFunc[BookingValidationFailedCmd,
 
 func NewBookingValidationFailedHandler(repo booking.Repo) BookingValidationFailedHandler {
 	return func(ctx context.Context, cmd BookingValidationFailedCmd) (*BookingValidationFailedRes, *i18np.Error) {
-		err := repo.MarkNotValid(ctx, cmd.BookingUUID)
+		err := repo.MarkNotValid(ctx, cmd.BookingUUID, cmd.Errors)
 		if err != nil {
 			return nil, err
 		}
