@@ -71,3 +71,5 @@ error_invite_timeout = "Invite timeout."
 error_invite_same_user = "Invite same user."
 
 user_expired = "User expired."
+
+listing_not_active = "Listing not active."

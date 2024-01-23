@@ -13,6 +13,7 @@ type Errors interface {
 	InvalidUUID() *i18np.Error
 	InternalError() *i18np.Error
 	NotAvailable() *i18np.Error
+	ListingNotActive() *i18np.Error
 	OnlyAdminCanDoThisAction() *i18np.Error
 	StartDateAfterEndDate() *i18np.Error
 	StartDateBeforeNow() *i18np.Error
@@ -38,6 +39,10 @@ func (e *errors) InvalidUUID() *i18np.Error {
 
 func (e *errors) InternalError() *i18np.Error {
 	return i18np.NewError(I18nMessages.InternalError)
+}
+
+func (e *errors) ListingNotActive() *i18np.Error {
+	return i18np.NewError(I18nMessages.ListingNotActive)
 }
 
 func (e *errors) NotAvailable() *i18np.Error {

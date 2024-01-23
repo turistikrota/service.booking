@@ -70,6 +70,9 @@ func NewBookingCreateHandler(factory booking.Factory, repo booking.Repo, events 
 		if _err != nil {
 			return nil, factory.Errors.Failed(_err.Error())
 		}
+		if !listing.IsActive {
+			return nil, factory.Errors.ListingNotActive()
+		}
 		listingImages := make([]booking.ListingImage, len(listing.Images))
 		for i, image := range listing.Images {
 			listingImages[i] = booking.ListingImage{
