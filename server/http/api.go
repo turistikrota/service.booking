@@ -63,7 +63,7 @@ func (h srv) BookingCancelAsBusiness(ctx *fiber.Ctx) error {
 	detail := command.BookingDetailCmd{}
 	h.parseParams(ctx, &detail)
 	cmd := command.BookingCancelAsBusinessCmd{}
-	h.parseParams(ctx, &cmd)
+	h.parseBody(ctx, &cmd)
 	cmd.BusinessUUID = current_business.Parse(ctx).UUID
 	cmd.UUID = detail.UUID
 	res, err := h.app.Commands.BookingCancelAsBusiness(ctx.UserContext(), cmd)

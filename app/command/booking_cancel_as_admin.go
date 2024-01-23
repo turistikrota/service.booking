@@ -14,8 +14,8 @@ type BookingCancelAsAdminContentDto struct {
 
 type BookingCancelAsAdminCmd struct {
 	UUID      string                         `json:"-"`
-	TrContent BookingCancelAsAdminContentDto `json:"trContent" validate:"required,dive"`
-	EnContent BookingCancelAsAdminContentDto `json:"enContent" validate:"required,dive"`
+	TrContent BookingCancelAsAdminContentDto `json:"tr" validate:"required,dive"`
+	EnContent BookingCancelAsAdminContentDto `json:"en" validate:"required,dive"`
 }
 
 type BookingCancelAsAdminRes struct{}

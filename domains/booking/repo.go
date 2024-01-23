@@ -520,9 +520,12 @@ func (r *repo) GetByUUIDAsBusiness(ctx context.Context, uuid string, business Wi
 		fields.UUID:         id,
 		fields.BusinessUUID: business.UUID,
 	}
-	res, _, _err := r.helper.GetFilter(ctx, filter)
+	res, exists, _err := r.helper.GetFilter(ctx, filter)
 	if _err != nil {
 		return nil, r.factory.Errors.InternalError()
+	}
+	if !exists {
+		return nil, r.factory.Errors.NotFound()
 	}
 	return *res, nil
 }

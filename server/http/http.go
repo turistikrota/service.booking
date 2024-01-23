@@ -87,7 +87,7 @@ func (h srv) Listen() error {
 
 			// business
 			business := router.Group("/business", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess())
-			business.Patch("/cancel", h.currentBusinessAccess(config.Roles.Booking.Super, config.Roles.Booking.Cancel), h.rateLimit(), h.wrapWithTimeout(h.BookingCancelAsBusiness))
+			business.Patch("/:uuid/cancel", h.currentBusinessAccess(config.Roles.Booking.Super, config.Roles.Booking.Cancel), h.rateLimit(), h.wrapWithTimeout(h.BookingCancelAsBusiness))
 
 			router.Get("/by-business/:uuid", h.rateLimit(), h.wrapWithTimeout(h.BookingListByBusiness))
 			router.Get("/by-listing/:uuid", h.rateLimit(), h.wrapWithTimeout(h.BookingListByListing))
@@ -107,8 +107,13 @@ func (h srv) Listen() error {
 }
 
 func (h srv) currentBusinessAccess(claims ...string) fiber.Handler {
+	roles := []string{config.Roles.Business.Super}
+	roles = append(roles, claims...)
 	return current_business.New(current_business.Config{
-		Roles: claims,
+		Roles:        roles,
+		I18n:         h.i18n,
+		RequiredKey:  Messages.Error.RequiredBusinessSelect,
+		ForbiddenKey: Messages.Error.ForbiddenBusinessSelect,
 	})
 }
 

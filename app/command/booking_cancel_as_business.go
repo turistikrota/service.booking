@@ -15,8 +15,8 @@ type BookingCancelAsBusinessContentDto struct {
 type BookingCancelAsBusinessCmd struct {
 	UUID         string                            `json:"-"`
 	BusinessUUID string                            `json:"-"`
-	TrContent    BookingCancelAsBusinessContentDto `json:"trContent" validate:"required,dive"`
-	EnContent    BookingCancelAsBusinessContentDto `json:"enContent" validate:"required,dive"`
+	TrContent    BookingCancelAsBusinessContentDto `json:"tr" validate:"required,dive"`
+	EnContent    BookingCancelAsBusinessContentDto `json:"en" validate:"required,dive"`
 }
 
 type BookingCancelAsBusinessRes struct{}
