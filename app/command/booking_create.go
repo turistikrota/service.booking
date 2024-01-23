@@ -78,13 +78,14 @@ func NewBookingCreateHandler(factory booking.Factory, repo booking.Repo, events 
 			}
 		}
 		e := factory.New(booking.NewConfig{
-			ListingUUID: cmd.ListingUUID,
-			People:      *cmd.People,
-			User:        cmd.User,
-			State:       booking.Created,
-			StartDate:   startDate,
-			EndDate:     endDate,
-			IsPublic:    cmd.IsPublic,
+			ListingUUID:  cmd.ListingUUID,
+			BusinessUUID: listing.BusinessUuid,
+			People:       *cmd.People,
+			User:         cmd.User,
+			State:        booking.Created,
+			StartDate:    startDate,
+			EndDate:      endDate,
+			IsPublic:     cmd.IsPublic,
 			Listing: booking.Listing{
 				Title:        strings.ToLower(listing.Title),
 				Slug:         listing.Slug,

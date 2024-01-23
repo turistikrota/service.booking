@@ -23,6 +23,8 @@ type Commands struct {
 	BookingGuestMarkPrivate  command.BookingGuestMarkPrivateHandler
 	BookingValidationSucceed command.BookingValidationSucceedHandler
 	BookingValidationFailed  command.BookingValidationFailedHandler
+	BookingCancelAsAdmin     command.BookingCancelAsAdminHandler
+	BookingCancelAsBusiness  command.BookingCancelAsBusinessHandler
 
 	InviteCreate command.InviteCreateHandler
 	InviteUse    command.InviteUseHandler
