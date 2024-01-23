@@ -31,6 +31,27 @@ type NewConfig struct {
 	IsPublic    *bool
 }
 
+type NewCancelConfig struct {
+	TrContent string
+	EnContent string
+	IsAdmin   bool
+}
+
+func (f Factory) NewCancelReason(cnf NewCancelConfig) *CancelReason {
+	cancelledBy := CancelOwnerBusiness
+	if cnf.IsAdmin {
+		cancelledBy = CancelOwnerAdmin
+	}
+	return &CancelReason{
+		Content: map[Locale]string{
+			LocaleTR: cnf.TrContent,
+			LocaleEN: cnf.EnContent,
+		},
+		CancelledBy: cancelledBy,
+		CancelledAt: time.Now(),
+	}
+}
+
 func (f Factory) New(cnf NewConfig) *Entity {
 	t := time.Now()
 	return &Entity{
@@ -97,4 +118,18 @@ func (f Factory) IsCancelable(e *Entity) bool {
 	}
 	now := time.Now()
 	return e.StartDate.After(now) && e.EndDate.After(now)
+}
+
+func (f Factory) IsCancelableAsBusiness(e *Entity) bool {
+	disallowStatus := []State{
+		Canceled,
+		PayRefunded,
+	}
+	for _, s := range disallowStatus {
+		if e.State == s {
+			return false
+		}
+	}
+	now := time.Now()
+	return e.StartDate.After(now) && e.StartDate.Add(-72*time.Hour).After(now)
 }

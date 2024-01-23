@@ -53,6 +53,8 @@ func NewApplication(cnf Config) app.Application {
 			BookingGuestMarkPrivate:  command.NewBookingGuestMarkPrivateHandler(bookingFactory, bookingRepo, bookingEvents),
 			BookingValidationSucceed: command.NewBookingValidationSucceedHandler(bookingRepo, bookingEvents),
 			BookingValidationFailed:  command.NewBookingValidationFailedHandler(bookingRepo),
+			BookingCancelAsAdmin:     command.NewBookingCancelAsAdminHandler(bookingFactory, bookingRepo, bookingEvents),
+			BookingCancelAsBusiness:  command.NewBookingCancelAsBusinessHandler(bookingFactory, bookingRepo, bookingEvents),
 
 			InviteCreate: command.NewInviteCreateHandler(bookingFactory, bookingRepo, inviteFactory, inviteRepo, inviteEvents),
 			InviteUse:    command.NewInviteUseHandler(inviteFactory, inviteRepo, bookingRepo),

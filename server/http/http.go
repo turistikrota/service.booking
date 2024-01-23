@@ -20,6 +20,7 @@ import (
 	"github.com/turistikrota/service.shared/server/http/auth"
 	"github.com/turistikrota/service.shared/server/http/auth/claim_guard"
 	"github.com/turistikrota/service.shared/server/http/auth/current_account"
+	"github.com/turistikrota/service.shared/server/http/auth/current_business"
 	"github.com/turistikrota/service.shared/server/http/auth/current_user"
 	"github.com/turistikrota/service.shared/server/http/auth/device_uuid"
 	"github.com/turistikrota/service.shared/server/http/auth/required_access"
@@ -80,10 +81,13 @@ func (h srv) Listen() error {
 
 			// queries
 			admin := router.Group("/admin", h.currentUserAccess(), h.requiredAccess())
-			admin.Get("/", h.adminRoute(config.Roles.Booking.List), h.rateLimit(), h.wrapWithTimeout(h.BookingAdminList))
-			admin.Get("/:uuid", h.adminRoute(config.Roles.Booking.View), h.rateLimit(), h.wrapWithTimeout(h.BookingAdminView))
+			admin.Get("/", h.adminRoute(config.Roles.Booking.Super, config.Roles.Booking.List), h.rateLimit(), h.wrapWithTimeout(h.BookingAdminList))
+			admin.Get("/:uuid", h.adminRoute(config.Roles.Booking.Super, config.Roles.Booking.View), h.rateLimit(), h.wrapWithTimeout(h.BookingAdminView))
+			admin.Patch("/:uuid/cancel", h.adminRoute(config.Roles.Booking.Super, config.Roles.Booking.Cancel), h.rateLimit(), h.wrapWithTimeout(h.BookingCancelAsAdmin))
 
 			// business
+			business := router.Group("/business", h.currentUserAccess(), h.requiredAccess(), h.currentAccountAccess())
+			business.Patch("/cancel", h.currentBusinessAccess(config.Roles.Booking.Super, config.Roles.Booking.Cancel), h.rateLimit(), h.wrapWithTimeout(h.BookingCancelAsBusiness))
 
 			router.Get("/by-business/:uuid", h.rateLimit(), h.wrapWithTimeout(h.BookingListByBusiness))
 			router.Get("/by-listing/:uuid", h.rateLimit(), h.wrapWithTimeout(h.BookingListByListing))
@@ -99,6 +103,12 @@ func (h srv) Listen() error {
 			router.Get("/guest/invite/:uuid", h.currentUserAccess(), h.requiredAccess(), h.rateLimit(), h.currentAccountAccess(), h.wrapWithTimeout(h.InviteGetByUUID))
 			return router
 		},
+	})
+}
+
+func (h srv) currentBusinessAccess(claims ...string) fiber.Handler {
+	return current_business.New(current_business.Config{
+		Roles: claims,
 	})
 }
 

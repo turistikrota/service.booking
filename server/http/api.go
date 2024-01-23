@@ -9,6 +9,7 @@ import (
 	"github.com/turistikrota/service.booking/domains/booking"
 	"github.com/turistikrota/service.booking/pkg/utils"
 	"github.com/turistikrota/service.shared/server/http/auth/current_account"
+	"github.com/turistikrota/service.shared/server/http/auth/current_business"
 	"github.com/turistikrota/service.shared/server/http/auth/current_user"
 )
 
@@ -37,6 +38,35 @@ func (h srv) BookingCancel(ctx *fiber.Ctx) error {
 	cmd.UserUUID = current_user.Parse(ctx).UUID
 	cmd.UserName = current_account.Parse(ctx).Name
 	res, err := h.app.Commands.BookingCancel(ctx.UserContext(), cmd)
+	if err != nil {
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+		return result.Error(h.i18n.TranslateFromError(*err, l, a))
+	}
+	return result.SuccessDetail(Messages.Success.Ok, res)
+}
+
+func (h srv) BookingCancelAsAdmin(ctx *fiber.Ctx) error {
+	detail := command.BookingDetailCmd{}
+	h.parseParams(ctx, &detail)
+	cmd := command.BookingCancelAsAdminCmd{}
+	h.parseBody(ctx, &cmd)
+	cmd.UUID = detail.UUID
+	res, err := h.app.Commands.BookingCancelAsAdmin(ctx.UserContext(), cmd)
+	if err != nil {
+		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
+		return result.Error(h.i18n.TranslateFromError(*err, l, a))
+	}
+	return result.SuccessDetail(Messages.Success.Ok, res)
+}
+
+func (h srv) BookingCancelAsBusiness(ctx *fiber.Ctx) error {
+	detail := command.BookingDetailCmd{}
+	h.parseParams(ctx, &detail)
+	cmd := command.BookingCancelAsBusinessCmd{}
+	h.parseParams(ctx, &cmd)
+	cmd.BusinessUUID = current_business.Parse(ctx).UUID
+	cmd.UUID = detail.UUID
+	res, err := h.app.Commands.BookingCancelAsBusiness(ctx.UserContext(), cmd)
 	if err != nil {
 		l, a := i18n.GetLanguagesInContext(*h.i18n, ctx)
 		return result.Error(h.i18n.TranslateFromError(*err, l, a))
