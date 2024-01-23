@@ -43,6 +43,8 @@ func NewBookingListByBusinessHandler(repo booking.Repo, cacheSrv cache.Service) 
 		query.FilterEntity.ForPrivate()
 		if query.IsPublic {
 			query.FilterEntity.PublicView()
+		} else {
+			query.FilterEntity.ForBusiness = true
 		}
 		offset := (*query.Page - 1) * *query.Limit
 		cacheHandler := func() (*list.Result[*booking.Entity], *i18np.Error) {

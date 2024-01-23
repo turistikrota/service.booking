@@ -5,13 +5,14 @@ import (
 )
 
 type FilterEntity struct {
-	Locale   string `json:"-" query:"-"`
-	UserName string `json:"-" query:"-"`
-	UserUUID string `json:"-" query:"-"`
-	Query    string `query:"q,omitempty" validate:"omitempty,max=100"`
-	State    string `query:"state,omitempty" validate:"omitempty,oneof=canceled not_valid created pay_expired pay_cancelled pay_pending pay_paid pay_refunded"`
-	Type     string `query:"type,omitempty" validate:"omitempty,oneof=guest organizer any"`
-	IsPublic *bool  `query:"isPublic,omitempty" validate:"omitempty"`
+	Locale      string `json:"-" query:"-"`
+	UserName    string `json:"-" query:"-"`
+	UserUUID    string `json:"-" query:"-"`
+	Query       string `query:"q,omitempty" validate:"omitempty,max=100"`
+	State       string `query:"state,omitempty" validate:"omitempty,oneof=canceled not_valid created pay_expired pay_cancelled pay_pending pay_paid pay_refunded"`
+	Type        string `query:"type,omitempty" validate:"omitempty,oneof=guest organizer any"`
+	IsPublic    *bool  `query:"isPublic,omitempty" validate:"omitempty"`
+	ForBusiness bool   `json:"-" query:"-"`
 }
 
 const (
@@ -93,47 +94,48 @@ func (r *repo) filterByType(list []bson.M, filter FilterEntity) []bson.M {
 	return list
 }
 
+func (r *repo) filterRegex(query string) bson.M {
+	return bson.M{
+		"$regex":   query,
+		"$options": "i",
+	}
+}
+
 func (r *repo) filterByQuery(list []bson.M, filter FilterEntity) []bson.M {
 	if filter.Query != "" {
-		list = append(list, bson.M{
-			"$or": []bson.M{
-				{
-					listingField(listingFields.Title): bson.M{
-						"$regex":   filter.Query,
-						"$options": "i",
-					},
-				},
-				{
-					listingField(listingFields.Description): bson.M{
-						"$regex":   filter.Query,
-						"$options": "i",
-					},
-				},
-				{
-					listingField(listingFields.BusinessName): bson.M{
-						"$regex":   filter.Query,
-						"$options": "i",
-					},
-				},
-				{
-					listingField(listingFields.CityName): bson.M{
-						"$regex":   filter.Query,
-						"$options": "i",
-					},
-				},
-				{
-					listingField(listingFields.DistrictName): bson.M{
-						"$regex":   filter.Query,
-						"$options": "i",
-					},
-				},
-				{
-					listingField(listingFields.CountryName): bson.M{
-						"$regex":   filter.Query,
-						"$options": "i",
-					},
-				},
+		regex := r.filterRegex(filter.Query)
+		filterFields := []bson.M{
+			{
+				listingField(listingFields.Title): regex,
 			},
+			{
+				listingField(listingFields.Description): regex,
+			},
+			{
+				listingField(listingFields.CityName): regex,
+			},
+			{
+				listingField(listingFields.DistrictName): regex,
+			},
+			{
+				listingField(listingFields.CountryName): regex,
+			},
+		}
+		if filter.ForBusiness {
+			filterFields = append(filterFields, bson.M{
+				guestField(guestFields.Name): regex,
+			}, bson.M{
+				userField(userFields.Name): regex,
+			}, bson.M{
+				fields.ListingUUID: regex,
+			})
+		} else {
+			filterFields = append(filterFields, bson.M{
+				listingField(listingFields.BusinessName): regex,
+			})
+		}
+		list = append(list, bson.M{
+			"$or": filterFields,
 		})
 	}
 	return list
